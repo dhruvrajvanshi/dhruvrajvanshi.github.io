@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Programming vs Plumbing - Why Bother?</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+            color: #333;
+            background-color: #fbfbfb;
+        }
+        main {
+            margin: auto;
+            width: 50em;
+            max-width: 98%;
+        }
+
+        pre {
+            display: inline;
+            margin: 0;
+        }
+        pre.block {
+            max-width: 100%;
+            overflow-x: auto;
+            margin: 1em 0em;
+            display: block;
+            padding: 0.75em 1em;
+            border-radius: 3px;
+            background-color: #292b2e;
+            color: #b2b2b2;
+            font-family: Consolas monospace;
+        }
+
+        blockquote {
+          font-style: italic;
+          box-sizing: border-box;
+          margin-left: 0px;
+          padding-left: 24px;
+          border-left: 3px solid #888;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>Programming vs Plumbing</h1>
+
+        <p>
+           I've been a professional programmer for a few years now and I've noticed that the code I write
+           falls into 2 distinct categories:
+        </p>
+
+        <ol>
+            <li>Logic</li>
+            <li>Plumbing</li>
+        </ol>
+
+        <p>
+            If you were hoping to read a post about actual plumbing, I'm sorry to disappoint. That wasn't
+            the type of plumbing I meant. Gotta get all that sweet sweet clickbait traffic from plumbers
+            interested in programming. <i>*Rubs palms*</i>.
+        </p>
+
+        <p>
+            "How are these 2 types of programming different?", you might ask...What does this type of plumbing
+            even mean? Well, I don't really have a definition at hand but it's a bit like advertising. I know it when
+            I see it.
+        </p>
+
+        <p>
+            To make this a little more concrete, I'll start with a piece of code which was written with little to
+            no awareness of these 2 categories.
+        </p>
+        
+        <h2>Story of a method</h2>
+
+        <p>
+            Imagine one Monday morning, your project manager comes up to you and says, "Hey, I need a list of
+            names of all highly paid employees. A highly paid employee is one who has a salary of more than 50,000 credits".
+            Also imagine that you work in the payroll department of a company. You're like, "Sure thing, let me write that up".
+        </p>
+
+
+        <p>
+            This example is contrived but it has a point. In reality, you might just run an SQL script and be done
+            with your job but bear with me.
+        </p>
+        <pre class='block'>
+<code class="language-java">List&lt;Name&gt; getNamesOfHighlyPaidEmployees() {
+  var names = new ArrayList&lt;String&gt;();
+  var allEmployees = employeeDAO.findAll();
+  var employeeIds = new ArrayList&lt;Long&gt;();
+  for (var employee : allEmployees) {
+    employeeIDs.add(employee.getId());
+  }
+  var salaryMap = salaryDAO.findByEmployeeIds(employeeIDs);
+  for (var employee : allEmployees) {
+    if (salaryMap.get(employee.getId()) &gt; 50000) {
+        names.add(salaryMap.get(employee.getId()));
+    }
+  }
+  return names;
+}</code></pre>
+    <p>
+        While this code certainly works, it is doing a lot of low level stuff here that's unrelated to the job at hand.
+        For example, <code>salaryDAO.findEmployeeIds</code> method needs a collection of employee IDs and employee DAO gives us
+        a list of employees. The conversion of <code>List&lt;Employee&gt;</code> isn't really relevant to the task at hand,
+        yet it is there.
+    </p>
+
+    <h2>Is it plumbing?</h2>
+    <p>
+        How do you decide what's plumbing and what's not? It's more of an art than an exact science but the rule
+        that I apply is whether the person who wants to consume the end result would find it relevant or not.
+    </p>
+    <p>
+        For example, if you're saying to your project manager, line 3 in our function is getting a list of all employees
+        and naming it <code>allEmployees</code>, they would understand that it is something that might be needed
+        for the task they asked you to do. However, if you told them lines 5-8 were taking the list of employees and converting
+        it to a list of employee ids so that you can call <code>salaryDAO.findEmployeeIDs</code>, you might start to lose
+        them. It smells like an implementation detail.
+    </p>
+
+    <h2>Hiding the plumbing</h2>
+
+    <p>
+        Lets start by pulling out the logic for converting a <code>List&lt;Employee&gt;</code> to a <code>List&lt;Long&gt;</code>
+        into a seperate method.
+    </p>
+<pre class='block'><code class="language-java">List&lt;Name> getNamesOfHighlyPaidEmployees() {
+  var names = new ArrayList&lt;String>();
+  var allEmployees = employeeDAO.findAll();
+  var salaryByEmployeeId = salaryDAO
+    .findByEmployeeIds(idsOf(allEmployees));
+  for (var employee : allEmployees) {
+      if (salaryByEmployeeId.get(employee.getId()) > 50000) {
+          names.add(salaryByEmployeeId.get(employee.getId()));
+      }
+  }
+  return names;
+}
+
+static List&lt;Long> idsOf(List&lt;Employee> employees) {
+  return employees.stream()
+    .map(Employee::getId)
+    .collect(Collectors.toList());
+}</code></pre>
+    <p>
+        I moved the <code>idsOf</code> function out of our main function because
+        transforming a <code>List&lt;Employee&gt;</code> to a <code>List&lt;Long&gt;</code> doesn't really
+        belong in a function named <code>getNamesOfHighlyPaidEmployees</code>.
+        I also replaced the loop with a stream operation because I prefer reading that. You might not.
+    </p>
+
+
+    <h2>Going further</h2>
+
+    <p>
+      I think that the final for loop is just noise and the line you really care about is the
+      one which decides whether an employee is highly paid. I think it is worth naming the piece
+      of code that defines what it means for an employee to be 'highlyPaid'
+    </p>
+    <pre class='block'><code class="language-java">List&lt;Name> getNamesOfHighlyPaidEmployees() {
+  var names = new ArrayList&lt;String>();
+  var allEmployees = employeeDAO.findAll();
+  var salaryByEmployeeId = salaryDAO
+    .findByEmployeeIds(idsOf(allEmployees));
+  for (var employee : allEmployees) {
+      if (isEmployeeHighlyPaid(employee, salaryByEmployeeId)) {
+          names.add(salaryByEmployeeId.get(employee.getId()));
+      }
+  }
+  return names;
+}
+
+static boolean isEmployeeHighlyPaid(Employee employee, Map&lt;Long, Float> salaryByEmployeeId) {
+  return salaryByEmployeeId.get(employee.getId()) > 50000
+}</code></pre>
+
+    <p>
+      In the last few lines, all we're doing is filtering out values by a predicate and transforming
+      the resulting list to another list. Streams are perfect for this.
+    </p>
+<pre class='block'><code class="language-java">List&lt;Name> getNamesOfHighlyPaidEmployees() {
+  var allEmployees = employeeDAO.findAll();
+  var salaryByEmployeeId = salaryDAO
+    .findByEmployeeIds(idsOf(allEmployees));
+  
+  return allEmployees.stream()
+    .filter(employee -> isEmployeeHighlyPaid(employee, salaryByEmployeeId))
+    .map(Employee::getName)
+    .collect(Collectors.toList());
+}</code></pre>
+
+    <h2>What's the point?</h2>
+    <p>
+      Overall, our refactored example has more lines of code. Why even bother doing it?
+      The argument for doing it is that the function we actually wanted to write has
+      better signal to noise ratio. It might not be so practical in this contrived example
+      but when you're doing something that has more complicated business logic, this kind
+      of stuff pays off. If you lint your source code based on cyclomatic complexity,
+      these practices will help you keep that in check.
+    </p>
+
+
+    <p>
+      The larger point is the non-plumbing part of your code should talk about high level
+      concepts, not implementation details. You should abstract different logical things
+      behind functions so that whoever reads your code doesn't have to parse through
+      noise to actually understand what your function is doing.
+    </p>
+
+    <h2>Writing code is about naming things things</h2>
+
+    <blockquote>
+    There are only two hard things in Computer Science: cache invalidation and naming things.<br>
+
+    - Phil Karlton
+
+    </blockquote>
+
+    <blockquote>
+      And cache invalidation isn't that hard<br>
+      - Me
+    </blockquote>
+
+    <p>Okay, the second 'quote' is tongue in cheek but you get the point.</p>
+
+
+    <h2>FAQ</h2>
+
+    <h3>Do you have something against for loops?</h3>
+    <p>No.</p>
+
+    <h3>How far should you go?</h3>
+    <p>
+      Season according to taste. Really, there's no limit to this. If you abstract enough,
+      business analysts could roughly understand what you're doing. This is the goal
+      I strive towards, but do what's right for you.
+    </p>
+    <h3>But what about performance?</h3>
+    <p>
+      Measure it and weigh the tradeoffs. By default, do the readable thing.
+      The <code>idsOf</code> bit from our example is practically free because it's doing the
+      exact same thing but in a seperate method. There's no excuse there.
+      The streams refactoring may be a bit on the nose for some people but probably,
+      getting the list of employees from the DB is gonna be orders of magnitued slower
+      than your stream methods so it won't matter anyway.
+    </p>
+
+  </main>
+
+    <style>
+        .token.keyword {
+            font-weight: bolder;
+            color: #4f97d7;
+        }
+
+        .token.function {
+            color: #bc6ec5;
+            font-weight: bold;
+        }
+
+        .token.class-name {
+          color: #ce537a;
+          font-weight: bold;
+        }
+
+
+    </style>
+<script src="/prism.js"></script>
+</body>
+
+</html>
