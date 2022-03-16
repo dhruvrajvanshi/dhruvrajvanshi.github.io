@@ -46,6 +46,7 @@ export async function getStaticPaths(): Promise<GetStaticPathsResult> {
     paths: files
       .filter(it => it.endsWith('.md') || it.endsWith('.mdx'))
       .map(it => `/articles/${it.replace(/\.mdx?$/, '')}`),
-    fallback: true
+    // render 404 if path is not this list
+    fallback: false
   }
 }
