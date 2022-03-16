@@ -43,7 +43,9 @@ export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
 export async function getStaticPaths(): Promise<GetStaticPathsResult> {
   const files = await fs.readdir('articles')
   return {
-    paths: files.map(it => `/articles/${it}`),
+    paths: files
+      .filter(it => it.endsWith('.md') || it.endsWith('.mdx'))
+      .map(it => `/articles/${it.replace(/\.mdx?$/, '')}`),
     fallback: true
   }
 }
