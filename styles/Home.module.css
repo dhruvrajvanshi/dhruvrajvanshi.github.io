@@ -1,9 +1,13 @@
 .container {
   padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .main {
   min-height: 100vh;
+  max-width: 1024px;
   padding: 4rem 0;
   flex: 1;
   display: flex;
@@ -51,26 +55,20 @@
 }
 
 .description {
-  margin: 4rem 0;
+  margin: 2rem 0;
   line-height: 1.5;
   font-size: 1.5rem;
 }
 
-.code {
-  background: #fafafa;
-  border-radius: 5px;
-  padding: 0.75rem;
-  font-size: 1.1rem;
-  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-    Bitstream Vera Sans Mono, Courier New, monospace;
+.profileLinks {
+  text-align: center;
+  line-height: 1.5;
 }
 
-.grid {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  max-width: 800px;
+.subDescription {
+  text-align: center;
+  font-size: 1.3rem;
+  line-height: 1.5;
 }
 
 .card {
