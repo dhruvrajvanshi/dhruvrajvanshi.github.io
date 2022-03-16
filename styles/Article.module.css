@@ -6,5 +6,11 @@
 }
 
 .container article {
-    max-width: 768px;
+    width: 768px;
+    max-width: 97%;
+}
+
+.container code {
+    max-width: 100%;
+    overflow-x: auto;
 }
