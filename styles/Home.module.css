@@ -49,6 +49,14 @@
   line-height: 1.5;
 }
 
+.profileLinks a {
+  font-size: 1.2rem;
+}
+
+.profileLinks li {
+  margin-bottom: 8px;
+}
+
 .subDescription {
   text-align: center;
   font-size: 1.3rem;
