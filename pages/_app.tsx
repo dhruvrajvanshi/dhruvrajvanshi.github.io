@@ -8,8 +8,8 @@ import { CssBaseline } from '@mui/material'
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <React.StrictMode>
-      <CssBaseline />
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Component {...pageProps} />
       </ThemeProvider>
     </React.StrictMode>
