@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { colors } from '@/theme'
+import { colors, theme } from '@/theme'
 import { sx } from '@/ui'
 import { omit } from '@/lib'
 import { FiMail, FiGithub, FiLinkedin } from 'react-icons/fi'
@@ -24,8 +24,8 @@ const Home: NextPage = () => {
   })
 
   const subHeadingSx = sx({
-    fontSize: '2xl',
-    color: colors.orange[500],
+    fontSize: 'large',
+    color: theme.palette.secondary.dark,
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: '8px',
