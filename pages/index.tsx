@@ -25,15 +25,17 @@ const Home: NextPage = () => {
 
   const subHeadingSx = sx({
     fontSize: 'large',
-    color: theme.palette.secondary.dark,
+    color: colors.orange[800],
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: '8px',
-    marginBottom: '8px'
+    marginBottom: '8px',
   })
 
   const headingSx = sx({
-    color: colors.grey[700],
+    color: colors.grey[800],
+    ...theme.typography.h3,
+    fontWeight: 'bold',
   })
 
   return (
