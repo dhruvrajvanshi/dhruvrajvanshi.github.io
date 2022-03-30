@@ -10,12 +10,6 @@ body {
   background-color: #fafafa;
 }
 
-ul {
-  list-style: none;
-  padding: 0px;
-}
-
-
 * {
   box-sizing: border-box;
 }

@@ -1,11 +1,10 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Heading, Box, Link, Text, Stack, BoxProps, List, ListItem, UnorderedList } from '@chakra-ui/react'
-import { colors, hsl } from '@/theme'
+import { colors } from '@/theme'
 import { sx } from '@/ui'
 import { omit } from '@/lib'
 import { FiMail, FiGithub, FiLinkedin } from 'react-icons/fi'
-import { css } from '@emotion/react'
+import { Box, BoxProps, Link, List, ListItem, Stack } from '@mui/material'
 
 const Home: NextPage = () => {
   const mainSx = sx({
@@ -33,6 +32,10 @@ const Home: NextPage = () => {
     marginBottom: '8px'
   })
 
+  const headingSx = sx({
+    color: colors.grey[700],
+  })
+
   return (
     <Box sx={{ width: '100%' }}>
       <Head>
@@ -40,73 +43,64 @@ const Home: NextPage = () => {
         <meta name="description" content="Dhruv's home page" />
       </Head>
 
-      <Stack as='main' sx={mainSx}>
+      <Stack sx={mainSx}>
         <Section>
-          <Heading as='h1' color={colors.gray[700]} mt='16'>
+          <Box component='h1' sx={headingSx}>
             Dhruv&apos;s Home Page
-          </Heading>
+          </Box>
 
-          <Box as='p' sx={subHeadingSx} >
+          <Box sx={subHeadingSx}>
             I&apos;m a software engineer.
           </Box>
         </Section>
-        <Section bgColor={colors.teal[400]}>
-          <Text as='p' sx={paraSx}>
+        <Section sx={{ backgroundColor: colors.teal[400] }}>
+          <Box component='p' sx={paraSx}>
             In my spare time, I like to build programming languages,
             compilers and VMs. Check out &nbsp;
             <a href="https://github.com/dhruvrajvanshi/hades-lang">Hades language</a>,
             which is the programming language I&apos;m working on right now.
-          </Text>
-          <Text as='p' sx={paraSx}>
+          </Box>
+          <Box component='p' sx={paraSx}>
             Apart from all this, I like to play drums and guitar,
             and in general learning about music theory.
-          </Text>
+          </Box>
         </Section>
 
-        <Section bgColor={colors.orange[300]}>
-          <UnorderedList textAlign={'center'} fontSize='2xl' css={css`
-            li {
-              display: inline-block;
-              margin-left: 8px;
-              margin-right: 8px;
-            }
-          `}>
-            {
-              [
-                {
-                  href: 'mailto:d@rajv.dev',
-                  label: 'Email',
-                  icon: FiMail,
-                },
-                {
-                  href: 'https://www.linkedin.com/in/dhruv-rajvanshi-186a0267',
-                  label: 'LinkedIn',
-                  icon: FiLinkedin
-                },
-                {
-                  href: 'https://github.com/dhruvrajvanshi/',
-                  label: 'Github',
-                  icon: FiGithub,
-                },
-              ].map(it => (
-                <ListItem key={it.href}>
-                  <Link href={it.href} id={it.label} textAlign='center' display={'flex'} flexDirection='column' alignItems={'center'}>
-                    <it.icon />
-                    <Box
-                      as='label'
-                      htmlFor={it.label}
-                      fontSize='md'
-                    >{it.label}</Box>
-                  </Link>
-                </ListItem>
-              ))
-            }
-
-          </UnorderedList>
+        <Section sx={{ backgroundColor: colors.orange[300] }}>
+          <ContactList />
         </Section>
       </Stack>
     </Box>
   )
+
+  function ContactList() {
+    const listSx = sx({
+      'li': {
+        display: 'inline-block',
+        margin: '8px',
+      }
+    })
+    return <Stack direction='row' sx={listSx} role='list'>
+      {
+        links().map(it => (
+          <ListItem key={it.href}>
+            <Link href={it.href} id={it.label} textAlign='center' display={'flex'} flexDirection='column' alignItems={'center'}>
+              <it.icon />
+              <Box
+                component='label'
+                htmlFor={it.label}
+                fontSize='md'
+              >{it.label}</Box>
+            </Link>
+          </ListItem>
+        ))
+      }
+    </Stack>
+
+    function links() {
+      return CONTACT_LINKS
+    }
+  }
 
   function Section(props: BoxProps) {
     const sectionContentSx = sx({
@@ -132,3 +126,21 @@ const Home: NextPage = () => {
 }
 
 export default Home
+
+const CONTACT_LINKS = [
+  {
+    href: 'mailto:d@rajv.dev',
+    label: 'Email',
+    icon: FiMail,
+  },
+  {
+    href: 'https://www.linkedin.com/in/dhruv-rajvanshi-186a0267',
+    label: 'LinkedIn',
+    icon: FiLinkedin
+  },
+  {
+    href: 'https://github.com/dhruvrajvanshi/',
+    label: 'Github',
+    icon: FiGithub,
+  },
+] as const

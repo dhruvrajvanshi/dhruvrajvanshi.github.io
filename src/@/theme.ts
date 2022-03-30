@@ -1,18 +1,17 @@
-import { theme as baseTheme } from '@chakra-ui/theme'
+import { createTheme } from '@mui/material'
+import * as muiColors from '@mui/material/colors'
+
+export const theme = createTheme({
+  palette: {
+    primary: {
+      ...muiColors.teal
+    },
+    secondary: {
+      ...muiColors.orange
+    }
+  },
+})
 
 export const colors = {
-  ...baseTheme.colors,
-  brand: baseTheme.colors.teal,
-  teal: {
-    ...baseTheme.colors.teal,
-    hue: 200
-  }
-}
-
-export const theme = {
-  ...baseTheme,
-  colors
-}
-export function hsl(hue: number, saturation: number, lightness: number) {
-  return `hsl(${hue}, ${saturation}%, ${lightness}%)`
+  ...muiColors
 }

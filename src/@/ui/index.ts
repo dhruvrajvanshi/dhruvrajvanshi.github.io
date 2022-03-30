@@ -1,3 +1,3 @@
-import { SystemStyleObject } from '@chakra-ui/react'
+import { SxProps, Theme } from '@mui/material'
 
-export const sx = (style: SystemStyleObject) => style
+export const sx = (style: SxProps<Theme>) => style

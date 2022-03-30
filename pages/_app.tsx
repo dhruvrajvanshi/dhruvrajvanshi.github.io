@@ -1,16 +1,18 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import { ChakraProvider } from '@chakra-ui/react'
 import { ThemeProvider } from '@emotion/react'
 import { theme } from '@/theme'
+import React from 'react'
+import { CssBaseline } from '@mui/material'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider>
+    <React.StrictMode>
+      <CssBaseline />
       <ThemeProvider theme={theme}>
         <Component {...pageProps} />
       </ThemeProvider>
-    </ChakraProvider>
+    </React.StrictMode>
   )
 }
 
