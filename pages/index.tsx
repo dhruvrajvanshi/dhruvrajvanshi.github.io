@@ -32,6 +32,7 @@ const Home: NextPage = () => {
   })
 
   const headingSx = sx({
+    textAlign: 'center',
     color: colors.grey[900],
     ...theme.typography.h2,
     marginTop: '40px',
