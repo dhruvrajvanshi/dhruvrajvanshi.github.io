@@ -24,18 +24,19 @@ const Home: NextPage = () => {
   })
 
   const subHeadingSx = sx({
-    fontSize: 'large',
+    fontSize: 'x-large',
     color: colors.orange[800],
     fontWeight: 'bold',
     textAlign: 'center',
-    marginTop: '8px',
     marginBottom: '8px',
   })
 
   const headingSx = sx({
-    color: colors.grey[800],
-    ...theme.typography.h3,
+    color: colors.grey[900],
+    ...theme.typography.h2,
+    marginTop: '40px',
     fontWeight: 'bold',
+    marginBottom: '16px'
   })
 
   return (
