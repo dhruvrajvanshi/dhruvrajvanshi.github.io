@@ -4,7 +4,7 @@ import { colors, theme } from '@/theme'
 import { sx } from '@/ui'
 import { omit } from '@/lib'
 import { FiMail, FiGithub, FiLinkedin } from 'react-icons/fi'
-import { Box, BoxProps, Link, List, ListItem, Stack } from '@mui/material'
+import { Box, BoxProps, Link, ListItem, Stack } from '@mui/material'
 
 const Home: NextPage = () => {
   const mainSx = sx({
