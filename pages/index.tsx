@@ -57,7 +57,7 @@ const Home: NextPage = () => {
             I&apos;m a software engineer.
           </Box>
         </Section>
-        <Section sx={{ backgroundColor: colors.teal[400] }}>
+        <Section sx={{ backgroundColor: theme.palette.primary.main }}>
           <Box component='p' sx={paraSx}>
             In my spare time, I like to build programming languages,
             compilers and VMs. Check out &nbsp;
@@ -70,7 +70,7 @@ const Home: NextPage = () => {
           </Box>
         </Section>
 
-        <Section sx={{ backgroundColor: colors.orange[300] }}>
+        <Section sx={{ backgroundColor: theme.palette.secondary.light }}>
           <ContactList />
         </Section>
       </Stack>
