@@ -1,9 +1,11 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Heading, Box, Link, Text, Stack, BoxProps, List, ListItem } from '@chakra-ui/react'
+import { Heading, Box, Link, Text, Stack, BoxProps, List, ListItem, UnorderedList } from '@chakra-ui/react'
 import { colors, hsl } from '@/theme'
 import { sx } from '@/ui'
 import { omit } from '@/lib'
+import { FiMail, FiGithub, FiLinkedin } from 'react-icons/fi'
+import { css } from '@emotion/react'
 
 const Home: NextPage = () => {
   const mainSx = sx({
@@ -62,14 +64,45 @@ const Home: NextPage = () => {
         </Section>
 
         <Section bgColor={colors.orange[300]}>
-          <List textAlign={'center'}>
-            <ListItem>
-              <Link href='https://www.linkedin.com/in/dhruv-rajvanshi-186a0267'>LinkedIn</Link>
-            </ListItem>
-            <ListItem>
-              <Link href='https://github.com/dhruvrajvanshi/'>Github</Link>
-            </ListItem>
-          </List>
+          <UnorderedList textAlign={'center'} fontSize='2xl' css={css`
+            li {
+              display: inline-block;
+              margin-left: 8px;
+              margin-right: 8px;
+            }
+          `}>
+            {
+              [
+                {
+                  href: 'mailto:d@rajv.dev',
+                  label: 'Email',
+                  icon: FiMail,
+                },
+                {
+                  href: 'https://www.linkedin.com/in/dhruv-rajvanshi-186a0267',
+                  label: 'LinkedIn',
+                  icon: FiLinkedin
+                },
+                {
+                  href: 'https://github.com/dhruvrajvanshi/',
+                  label: 'Github',
+                  icon: FiGithub,
+                },
+              ].map(it => (
+                <ListItem key={it.href}>
+                  <Link href={it.href} id={it.label} textAlign='center' display={'flex'} flexDirection='column' alignItems={'center'}>
+                    <it.icon />
+                    <Box
+                      as='label'
+                      htmlFor={it.label}
+                      fontSize='md'
+                    >{it.label}</Box>
+                  </Link>
+                </ListItem>
+              ))
+            }
+
+          </UnorderedList>
         </Section>
       </Stack>
     </Box>
