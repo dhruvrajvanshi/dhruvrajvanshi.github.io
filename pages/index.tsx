@@ -1,10 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Heading, Box, Link, Text, Stack, BoxProps, List, ListItem } from '@chakra-ui/react'
-import { Span } from '@/ui/span'
 import { colors, hsl } from '@/theme'
 import { sx } from '@/ui'
-import { css } from '@emotion/react'
 import { omit } from '@/lib'
 
 const Home: NextPage = () => {
