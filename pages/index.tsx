@@ -1,7 +1,16 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import blinkingCursor from '../styles/blinking-cursor.module.css'
+import { FaReact, FaJava, FaNodeJs, FaAngular } from 'react-icons/fa'
+import { DiRuby, DiPython, DiDjango } from 'react-icons/di'
+import {
+  SiRubyonrails,
+  SiSpring,
+  SiKotlin,
+  SiScala,
+  SiTypescript,
+} from 'react-icons/si'
 
 function* repeat<T>(value: T, times: number) {
   for (let i = 0; i < times; i++) {
@@ -95,7 +104,72 @@ export default function Home() {
     </div>
   )
 }
+const feFwChoices = [
+  <div key='react' className='flex justify-center space-x-2'>
+    <FaReact className='text-sky-500' key='react' />
+  </div>,
+
+  <div key='angular' className='flex justify-center space-x-2'>
+    <FaAngular className='text-red-600' key='angular' />
+  </div>,
+]
+
+const beChoices = [
+  <div key='ruby' className='flex justify-center space-x-2'>
+    <DiRuby className='text-red-600' />
+    <SiRubyonrails className='text-red-600' />
+  </div>,
+  <div key='jvm' className='flex justify-center space-x-2'>
+    <FaJava className='text-blue-700' />
+    <SiScala className='text-red-600' />
+    <SiSpring className='text-green-600' />
+  </div>,
+  <div key='python' className='flex justify-center space-x-2'>
+    <DiPython />
+    <DiDjango />
+  </div>,
+
+  <div key='nodejs' className='flex justify-center space-x-2'>
+    <FaNodeJs className='text-green-600' />
+    <SiTypescript className='text-blue-500' />
+  </div>,
+]
+function TechStacksSection() {
+  return (
+    <section className='mt-16 text-center'>
+      <h2 className='text-4xl font-extrabold'>
+        Expert in your preferred tech stack
+      </h2>
+      <div>
+        <h3 className='text-3xl mt-4 font-semibold'>From front</h3>
+        <ChoiceIconAnimator choices={feFwChoices} />
+      </div>
+      <div>
+        <h3 className='text-3xl mt4 font-semibold'>To back</h3>
+        <ChoiceIconAnimator choices={beChoices} />
+      </div>
+    </section>
+  )
+}
 
 function BlinkingCursor() {
   return <span className={blinkingCursor.blink}>|</span>
+}
+function ChoiceIconAnimator({
+  choices,
+}: {
+  choices: ReadonlyArray<React.ReactNode>
+}) {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((i) => {
+        const nextIndex = (i + 1) % choices.length
+        return nextIndex
+      })
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [choices])
+  return <div className='text-4xl'>{choices[index]}</div>
 }
