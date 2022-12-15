@@ -156,7 +156,7 @@ function ExperienceSection() {
   }) {
     return (
       <div className='mt-4' style={{ lineHeight: '1.6' }}>
-        <h3 className='mb-2'>
+        <h3 className='mb-1'>
           <span className='text-lg text-pink-600 font-bold'>
             {company}, {location}
           </span>
