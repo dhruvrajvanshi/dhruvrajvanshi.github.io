@@ -1,7 +1,49 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import blinkingCursor from '../styles/blinking-cursor.module.css'
 
+function* repeat<T>(value: T, times: number) {
+  for (let i = 0; i < times; i++) {
+    yield value
+  }
+}
+const textItems = [
+  'f',
+  'fi',
+  'fir',
+  'firs',
+  ...repeat('first', 12),
+  'firs',
+  'fir',
+  'fi',
+  'f',
+  '',
+  'n',
+  'ne',
+  'nex',
+  ...repeat('next', 12),
+  'nex',
+  'ne',
+  'n',
+  '',
+]
 export default function Home() {
+  const [dynText, setDynText] = useState('first')
+
+  useEffect(() => {
+    let i = 0
+
+    const interval = setInterval(() => {
+      setDynText(textItems[i])
+
+      i = (i + 1) % textItems.length
+    }, 200)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
   return (
     <div>
       <Head>
@@ -33,7 +75,9 @@ export default function Home() {
           >
             Dhruv Rajvanshi
           </span>
-          , tech lead for your first million users.
+          , tech lead for your <br />
+          {dynText}
+          <BlinkingCursor /> million users.
         </h1>
 
         <div className='mx-auto mt-8 text-slate-600'>
@@ -49,4 +93,8 @@ export default function Home() {
       </section>
     </div>
   )
+}
+
+function BlinkingCursor() {
+  return <span className={blinkingCursor.blink}>|</span>
 }

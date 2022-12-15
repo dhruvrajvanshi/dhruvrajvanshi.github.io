@@ -1,0 +1,11 @@
+
+@keyframes blinking-cursor {
+    0% {
+        opacity: 0;
+    }
+}
+
+.blink {
+    animation: blinking-cursor 1s steps(2) infinite;
+    font-weight: 100;
+}
