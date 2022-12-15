@@ -128,14 +128,13 @@ function ExperienceSection() {
         >
           Lead developer for the frontend React app along with occasional
           infrastructure and backend work.
-          <SubsectionHeading>Mistakes</SubsectionHeading>
+          <SubsectionHeading>Learnings</SubsectionHeading>
           <ul className='list-disc'>
+            <li>Writing tests retrospectively isn&apos;t feasible.</li>
             <li>
-              The chat section of the app was really complex. I should have
-              spend a week to simplify it.
+              Let components control their data fetching. Global state is not
+              worth it.
             </li>
-            <li>Test coverage wasn&apos;t adequate.</li>
-            <li>Mistaken bet on redux.</li>
           </ul>
         </Company>
       </div>
@@ -172,5 +171,5 @@ function ExperienceSection() {
 }
 
 function SubsectionHeading({ children }: { children: string }) {
-  return <div className='text-rose-600 font-semibold'>{children}</div>
+  return <div className='text-rose-600 font-semibold mt-1'>{children}</div>
 }
