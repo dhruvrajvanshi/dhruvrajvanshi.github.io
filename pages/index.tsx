@@ -23,9 +23,17 @@ export default function Home() {
           />
         </div>
 
-        <h1 className='text-slate-900 text-4xl font-bold text-center mt-12 mx-16'>
-          <span className='text-indigo-700'>Dhruv Rajvanshi</span>, tech lead
-          for your first million users.
+        <h1 className='text-slate-900 text-4xl text-center mt-12 mx-16 font-extrabold'>
+          <span
+            className='text-transparent'
+            style={{
+              backgroundClip: 'text',
+              backgroundImage: 'linear-gradient(90deg, #7928CA, #FF0080)',
+            }}
+          >
+            Dhruv Rajvanshi
+          </span>
+          , tech lead for your first million users.
         </h1>
 
         <div className='mx-auto mt-8 text-slate-600'>
@@ -34,7 +42,7 @@ export default function Home() {
         </div>
 
         <a href='mailto:d@rajv.dev'>
-          <button className='bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white mt-4 px-3 py-2 text-center rounded-md '>
+          <button className='bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white mt-4 px-3 py-2 text-center rounded-md font-semibold'>
             Contact Me
           </button>
         </a>
