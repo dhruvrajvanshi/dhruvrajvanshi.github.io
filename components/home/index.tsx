@@ -5,6 +5,7 @@ import blinkingCursor from 'styles/blinking-cursor.module.css'
 import { FaReact, FaJava, FaNodeJs, FaAngular } from 'react-icons/fa'
 import { DiRuby, DiPython, DiDjango } from 'react-icons/di'
 import { SiRubyonrails, SiSpring, SiScala, SiTypescript } from 'react-icons/si'
+import { GradientText } from 'components/GradientText'
 
 function* repeat<T>(value: T, times: number) {
   for (let i = 0; i < times; i++) {
@@ -69,17 +70,10 @@ export default function Home() {
         </div>
 
         <h1 className='text-slate-900 text-4xl text-center mt-12 mx-16 font-extrabold'>
-          <span
-            className='text-transparent'
-            style={{
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              backgroundImage: 'linear-gradient(90deg, #7928CA, #FF0080)',
-            }}
-          >
-            Dhruv Rajvanshi
-          </span>
-          , tech lead for your <br />
+          <GradientText start='#7928CA' stop='#FF0080'>
+            Dhruv Rajvanshi,
+          </GradientText>
+          &nbsp;tech lead for your <br />
           {dynText}
           <BlinkingCursor /> million users.
         </h1>
