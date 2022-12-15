@@ -70,6 +70,7 @@ export default function Home() {
             className='text-transparent'
             style={{
               backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
               backgroundImage: 'linear-gradient(90deg, #7928CA, #FF0080)',
             }}
           >
