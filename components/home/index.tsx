@@ -12,42 +12,8 @@ function* repeat<T>(value: T, times: number) {
     yield value
   }
 }
-const textItems = [
-  'f',
-  'fi',
-  'fir',
-  'firs',
-  ...repeat('first', 12),
-  'firs',
-  'fir',
-  'fi',
-  'f',
-  '',
-  'n',
-  'ne',
-  'nex',
-  ...repeat('next', 12),
-  'nex',
-  'ne',
-  'n',
-  '',
-]
+
 export default function Home() {
-  const [dynText, setDynText] = useState('first')
-
-  useEffect(() => {
-    let i = 0
-
-    const interval = setInterval(() => {
-      setDynText(textItems[i])
-
-      i = (i + 1) % textItems.length
-    }, 200)
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
-
   return (
     <div>
       <Head>
@@ -74,8 +40,7 @@ export default function Home() {
             Dhruv Rajvanshi,
           </GradientText>
           &nbsp;tech lead for your <br />
-          {dynText}
-          <BlinkingCursor /> million users.
+          <FirstNextCursor /> million users.
         </h1>
 
         <div className='mx-auto mt-8 text-slate-600'>
@@ -161,3 +126,46 @@ function ChoiceIconAnimator({
   }, [choices])
   return <div className='text-4xl'>{choices[index]}</div>
 }
+
+export function FirstNextCursor() {
+  const [dynText, setDynText] = useState('first')
+  useEffect(() => {
+    let i = 0
+
+    const interval = setInterval(() => {
+      setDynText(textItems[i])
+
+      i = (i + 1) % textItems.length
+    }, 200)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
+  return (
+    <>
+      {dynText}
+      <BlinkingCursor />
+    </>
+  )
+}
+const textItems = [
+  'f',
+  'fi',
+  'fir',
+  'firs',
+  ...repeat('first', 12),
+  'firs',
+  'fir',
+  'fi',
+  'f',
+  '',
+  'n',
+  'ne',
+  'nex',
+  ...repeat('next', 12),
+  'nex',
+  'ne',
+  'n',
+  '',
+]
