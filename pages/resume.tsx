@@ -158,10 +158,7 @@ function ExperienceSection() {
     children: React.HTMLProps<HTMLDivElement>['children']
   }) {
     return (
-      <div
-        className='mt-4'
-        style={{ lineHeight: '1.6', fontFamily: 'monospace' }}
-      >
+      <div className='mt-4' style={{ lineHeight: '1.6', fontSize: '87%' }}>
         <h3 className='mb-1'>
           <span className='text-lg text-pink-600 font-bold'>
             {company}, {location}
