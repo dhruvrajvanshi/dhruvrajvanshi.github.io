@@ -51,10 +51,13 @@ const tech = [
 export default function Resume() {
   return (
     <div className='px-8' style={{ maxWidth: '768px', margin: 'auto' }}>
-      <h1 className='text-5xl font-extrabold mt-8 text-slate-700'>Resume</h1>
+      <h1 className='text-4xl font-extrabold mt-8 text-slate-700'>Resume</h1>
       <Section>
         <SectionHeader>Technologies</SectionHeader>
-        <ul className='mt-4 flex space-x-6 flex-wrap justify-center text-center items-center'>
+        <ul
+          className='mt-4 flex space-x-6 flex-wrap justify-center text-center items-center'
+          style={{ fontFamily: 'monospace' }}
+        >
           {tech.map(({ icon, text }) => (
             <li key={text} className='flex items-center justify-center p-1'>
               <span className='mr-2'>{icon}</span> <span>{text}</span>
@@ -69,7 +72,7 @@ export default function Resume() {
 }
 
 function SectionHeader({ children }: { children: string }) {
-  return <h2 className='text-4xl font-bold mt-4 text-slate-700'>{children}</h2>
+  return <h2 className='text-3xl font-bold mt-4 text-slate-700'>{children}</h2>
 }
 function Section(props: React.HTMLProps<HTMLDivElement>) {
   return <section {...props} />
@@ -155,7 +158,10 @@ function ExperienceSection() {
     children: React.HTMLProps<HTMLDivElement>['children']
   }) {
     return (
-      <div className='mt-4' style={{ lineHeight: '1.6' }}>
+      <div
+        className='mt-4'
+        style={{ lineHeight: '1.6', fontFamily: 'monospace' }}
+      >
         <h3 className='mb-1'>
           <span className='text-lg text-pink-600 font-bold'>
             {company}, {location}
