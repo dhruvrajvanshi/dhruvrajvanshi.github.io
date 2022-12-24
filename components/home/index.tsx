@@ -3,8 +3,14 @@ import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import blinkingCursor from 'styles/blinking-cursor.module.css'
 import { FaReact, FaJava, FaNodeJs, FaAngular } from 'react-icons/fa'
-import { DiRuby, DiPython, DiDjango } from 'react-icons/di'
-import { SiRubyonrails, SiSpring, SiScala, SiTypescript } from 'react-icons/si'
+import { DiRuby, DiPython, DiDjango, DiJava } from 'react-icons/di'
+import {
+  SiRubyonrails,
+  SiSpring,
+  SiScala,
+  SiTypescript,
+  SiApachekafka,
+} from 'react-icons/si'
 import { GradientText } from 'components/GradientText'
 
 function* repeat<T>(value: T, times: number) {
@@ -54,9 +60,63 @@ export default function Home() {
           </button>
         </a>
       </section>
+
+      <section className='max-w-5xl mx-auto px-8 text-center mb-8'>
+        <h2 className='text-3xl mb-4 font-semibold'>
+          Expertise in multiple technology stacks
+        </h2>
+        <div>
+          Depending on various factors such as team size, industry, performance
+          requirements, you will require various parts of your app be built with
+          different tools. I have professional experience in these.
+        </div>
+
+        <div className='flex text-5xl mt-6 justify-center mx-2 flex-wrap'>
+          {techs.map(({ icon, label }) => (
+            <div className='w-16 m-2 my-4' key={label}>
+              {icon}
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }
+
+const techs = [
+  {
+    icon: <FaReact />,
+    label: 'React',
+  },
+  {
+    icon: <FaAngular />,
+    label: 'Angular',
+  },
+  {
+    icon: <FaJava />,
+    label: 'Java',
+  },
+  {
+    icon: <SiSpring />,
+    label: 'Spring',
+  },
+  {
+    icon: <SiApachekafka />,
+    label: 'Kafka',
+  },
+  {
+    icon: <FaNodeJs />,
+    label: 'Node JS',
+  },
+  {
+    icon: <DiPython />,
+    label: 'Python',
+  },
+  {
+    icon: <SiRubyonrails />,
+    label: 'Ruby on Rails',
+  },
+]
 const feFwChoices = [
   <div key='react' className='flex justify-center space-x-2'>
     <FaReact className='text-sky-500' key='react' />
