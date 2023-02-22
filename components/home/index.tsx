@@ -45,13 +45,13 @@ export default function Home() {
           <GradientText start='#7928CA' stop='#FF0080'>
             Dhruv Rajvanshi
           </GradientText>
-          <div>
+          <div className='mt-6'>
             I am an engineer for getting to your <br />
             <FirstNextCursor /> million users.
           </div>
         </h1>
 
-        <div className='mx-auto mt-8 text-slate-600'>
+        <div className='mx-auto mt-8 mb-4 text-slate-600'>
           I can help you with bootstraping your next Sass product and scale it
           to the moon.
         </div>
