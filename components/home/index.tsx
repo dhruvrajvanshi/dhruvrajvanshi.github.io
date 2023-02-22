@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Dhruv&apos; Home Page</title>
+        <title>Dhruv&apos;s Home Page</title>
         <meta
           name='description'
           content="Dhruv Rajvanshi. I'm a software engineer who specializes in backend and full stack development."
@@ -46,7 +46,7 @@ export default function Home() {
             Dhruv Rajvanshi
           </GradientText>
           <div className='mt-6'>
-            I am an engineer for getting to your <br />
+            I&apos;m an engineer for getting to your <br />
             <FirstNextCursor /> million users.
           </div>
         </h1>
