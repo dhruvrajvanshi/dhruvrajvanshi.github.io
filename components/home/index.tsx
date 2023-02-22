@@ -26,7 +26,7 @@ export default function Home() {
         <title>Dhruv&apos; Home Page</title>
         <meta
           name='description'
-          content='Dhruv Rajvanshi. Hire me for your software needs'
+          content="Dhruv Rajvanshi. I'm a software engineer who specializes in backend and full stack development."
         />
       </Head>
 
@@ -43,15 +43,17 @@ export default function Home() {
 
         <h1 className='text-slate-900 text-4xl text-center mt-12 mx-16 font-extrabold'>
           <GradientText start='#7928CA' stop='#FF0080'>
-            Dhruv Rajvanshi,
+            Dhruv Rajvanshi
           </GradientText>
-          &nbsp;tech lead for your <br />
-          <FirstNextCursor /> million users.
+          <div>
+            I am an engineer for getting to your <br />
+            <FirstNextCursor /> million users.
+          </div>
         </h1>
 
         <div className='mx-auto mt-8 text-slate-600'>
-          I specialize in web development. I can help you with bootstraping your
-          next Sass product and scale it to the moon.
+          I can help you with bootstraping your next Sass product and scale it
+          to the moon.
         </div>
 
         <a href='mailto:d@rajv.dev'>
