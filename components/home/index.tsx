@@ -33,7 +33,7 @@ export default function Home() {
       <section className='max-w-5xl mx-auto px-8 text-center mb-8'>
         <div className='text-center'>
           <Image
-            src='/images/avatar.jpg'
+            src='/images/avatar.png'
             alt='avatar'
             width={160}
             height={160}
