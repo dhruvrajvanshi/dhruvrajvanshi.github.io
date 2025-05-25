@@ -10,18 +10,7 @@ import {
 import type { Route } from './+types/root'
 import './app.css'
 
-export const links: Route.LinksFunction = () => [
-  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-  {
-    rel: 'preconnect',
-    href: 'https://fonts.gstatic.com',
-    crossOrigin: 'anonymous',
-  },
-  {
-    rel: 'stylesheet',
-    href: 'https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap',
-  },
-]
+export const links: Route.LinksFunction = () => []
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

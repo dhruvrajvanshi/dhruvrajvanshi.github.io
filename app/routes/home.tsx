@@ -15,12 +15,12 @@ export default function Home() {
           Welcome to Dhruv's Home Page!
         </h1>
 
-        <p className='mb-2'>
+        <p>
           I build software. You can find some of my work on{' '}
           <a href='https://github.com/dhruvrajvanshi'>GitHub</a>.
         </p>
 
-        <p className='mb-2'>
+        <p>
           I'm also available for consulting and freelance work. I'm proficient
           full stack web development, particularly with React, TypeScript, Java
           and Kotlin.
@@ -47,7 +47,7 @@ export default function Home() {
                 </h3>
               </header>
               <div className='text-sm text-dimmed mb-1'>{post.published}</div>
-              <p className='mb-1'>{post.preview}</p>
+              <div className='mb-1'>{post.preview}</div>
               <a href={post.href}>Read more</a>
             </article>
           ))}
