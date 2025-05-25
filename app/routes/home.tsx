@@ -10,7 +10,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return (
     <>
-      <main className='pt-16 p-4 container mx-auto  max-w-4xl'>
+      <main className='pt-16 p-4 container'>
         <h1>Welcome to Dhruv's Home Page!</h1>
 
         <p>
@@ -34,18 +34,18 @@ export default function Home() {
         </p>
 
         <section className='mt-4'>
-          <h2>Writings</h2>
-          <p>Here is a selected sample of my writings.</p>
-          <ul>
-            {posts.map((post) => (
-              <li key={post.href}>
-                <a href={post.href} className='text-xl mb-2 block'>
-                  {post.title}
-                </a>
-                <p>{post.preview}</p>
-              </li>
-            ))}
-          </ul>
+          <h2>Articles</h2>
+          {posts.map((post) => (
+            <article key={post.href}>
+              <header className='mb-2 text-lg font-semibold'>
+                <h3>
+                  <a href={post.href}>{post.title}</a>
+                </h3>
+              </header>
+              <div className='text-sm text-gray-300 mb-2'>{post.published}</div>
+              <p>{post.preview}</p>
+            </article>
+          ))}
         </section>
       </main>
     </>
@@ -58,11 +58,13 @@ const posts = [
     href: 'https://medium.com/@dhruvrajvanshi/advanced-typescript-patterns-6cf8826c7944',
     preview:
       'Some cool things that I discovered in Typescript that allow me to statically check pretty neat invariants and reduce type/interface declaration boilerplate using type inference.',
+    published: 'May 9, 2018',
   },
   {
     title: 'Making exceptions type safe in Typescript',
     href: 'https://medium.com/@dhruvrajvanshi/making-exceptions-type-safe-in-typescript-c4d200ee78e9',
     preview:
       'I show a way to do type-safe error propagation in Typescript using some advanced type system features.',
+    published: 'Feb 11, 2018',
   },
 ]
