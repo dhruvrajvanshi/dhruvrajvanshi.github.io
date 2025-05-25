@@ -23,3 +23,7 @@ body {
   @apply text-gray-500 dark:text-gray-400;
 }
 
+a:not(.unstyled) {
+  @apply text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-500 underline;
+}
+

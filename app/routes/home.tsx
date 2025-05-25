@@ -41,14 +41,14 @@ export default function Home() {
             <article key={post.href} className='mb-5'>
               <header className='mb-1 text-lg font-semibold'>
                 <h3>
-                  <a href={post.href}>{post.title}</a>
+                  <a href={post.href} className='unstyled'>
+                    {post.title}
+                  </a>
                 </h3>
               </header>
               <div className='text-sm text-dimmed mb-1'>{post.published}</div>
               <p className='mb-1'>{post.preview}</p>
-              <a href={post.href} className='text-blue-400 underline text-sm'>
-                Read more
-              </a>
+              <a href={post.href}>Read more</a>
             </article>
           ))}
         </section>
