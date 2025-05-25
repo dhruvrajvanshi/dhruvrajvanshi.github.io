@@ -11,14 +11,16 @@ export default function Home() {
   return (
     <>
       <main className='pt-16 p-4 container'>
-        <h1>Welcome to Dhruv's Home Page!</h1>
+        <h1 className='text-3xl font-semibold mb-4'>
+          Welcome to Dhruv's Home Page!
+        </h1>
 
-        <p>
+        <p className='mb-2'>
           I build software. You can find some of my work on{' '}
           <a href='https://github.com/dhruvrajvanshi'>GitHub</a>.
         </p>
 
-        <p>
+        <p className='mb-2'>
           I'm also available for consulting and freelance work. I'm proficient
           full stack web development, particularly with React, TypeScript, Java
           and Kotlin.
@@ -33,17 +35,20 @@ export default function Home() {
           .
         </p>
 
-        <section className='mt-4'>
-          <h2>Articles</h2>
+        <section className='mt-6'>
+          <h2 className='text-2xl mb-2'>Articles</h2>
           {posts.map((post) => (
-            <article key={post.href}>
-              <header className='mb-2 text-lg font-semibold'>
+            <article key={post.href} className='mb-5'>
+              <header className='mb-1 text-lg font-semibold'>
                 <h3>
                   <a href={post.href}>{post.title}</a>
                 </h3>
               </header>
-              <div className='text-sm text-gray-300 mb-2'>{post.published}</div>
-              <p>{post.preview}</p>
+              <div className='text-sm text-dimmed mb-1'>{post.published}</div>
+              <p className='mb-1'>{post.preview}</p>
+              <a href={post.href} className='text-blue-400 underline text-sm'>
+                Read more
+              </a>
             </article>
           ))}
         </section>
