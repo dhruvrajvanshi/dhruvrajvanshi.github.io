@@ -3,13 +3,16 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif: "Noto Serif", "Merriweather", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
 html,
 body {
+  font-family: var(--font-serif);
   line-height: 1.5;
   font-size: 18px;
-  @apply bg-white dark:bg-gray-950;
+  @apply text-gray-800 dark:text-gray-200;
+  @apply bg-gray-100 dark:bg-gray-900;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
