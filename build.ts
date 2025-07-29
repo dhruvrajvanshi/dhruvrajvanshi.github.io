@@ -18,7 +18,7 @@ async function main() {
     const text = await readFile(Path.resolve('routes', file), 'utf8')
     const parsed = parse(text)
     const routeName = file.replace(/\.md$/, '')
-    const hasCSS = existsSync(Path.resolve(OUT_DIR, routeName + '.css'))
+    const hasCSS = existsSync(Path.resolve('./routes', routeName + '.css'))
     const outPath = Path.resolve(OUT_DIR, routeName + '.html')
     const cssLink = hasCSS
       ? `<link rel="stylesheet" href="/${routeName}.css">`
