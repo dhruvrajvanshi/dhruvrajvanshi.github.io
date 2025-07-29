@@ -15,6 +15,9 @@ body {
     color: #e0e0e0;
   }
   a {
+    color: oklch(74.6% .16 232.661);
+  }
+  a:visited {
     color: #bb86fc;
   }
 }
