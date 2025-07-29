@@ -13,6 +13,7 @@ async function main() {
     assert(file.endsWith('.md') || file.endsWith('.css'))
     if (file.endsWith('.css')) {
       cp(Path.resolve('routes', file), Path.resolve(OUT_DIR, file))
+      continue
     }
     const text = await readFile(Path.resolve('routes', file), 'utf8')
     const parsed = parse(text)
