@@ -30,7 +30,9 @@ async function main() {
     ${cssLink}
 </head>
 <body>
+<main>
 ${parsed}
+</main>
 </body>
 </html>
 `
