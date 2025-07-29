@@ -3,6 +3,7 @@
   "extends": "./tsconfig.json",
   "include": [
     "./build.ts",
+    "./dev.ts"
   ],
   "compilerOptions": {
     "module": "NodeNext",
