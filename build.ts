@@ -17,6 +17,7 @@ async function main() {
     }
     const text = await readFile(Path.resolve('routes', file), 'utf8')
     const [frontmatter, remaining] = parseFrontmatter(text)
+    if (frontmatter.disabled) continue
     const parsed = parse(remaining)
     const routeName = file.replace(/\.md$/, '')
     const hasCSS = existsSync(Path.resolve('./routes', routeName + '.css'))
