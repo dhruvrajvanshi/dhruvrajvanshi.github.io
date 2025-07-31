@@ -6,8 +6,10 @@
     "build": "./build.ts"
   },
   "devDependencies": {
+    "@types/mustache": "^4.2.6",
     "@types/node": "^24.1.0",
     "marked": "^16.1.1",
+    "mustache": "^4.2.0",
     "typescript": "^5.8.3"
   },
   "volta": {

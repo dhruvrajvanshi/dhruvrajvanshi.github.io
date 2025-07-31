@@ -1,46 +1,32 @@
 #!/usr/bin/env node
-import { readdir, readFile, mkdir, cp, writeFile } from 'node:fs/promises'
+import { readdir, readFile, mkdir, writeFile, cp } from 'node:fs/promises'
 import assert from 'node:assert/strict'
-import { parse } from 'marked'
+import * as Marked from 'marked'
 import Path from 'node:path'
-import { existsSync } from 'node:fs'
+import Mustache from 'mustache'
 
 const OUT_DIR = './dist'
 async function main() {
   await mkdir(OUT_DIR, { recursive: true })
 
+  await cp('./assets', Path.resolve(OUT_DIR, 'assets'), { recursive: true })
+
+  const layout = await readFile('./routes/layout.html', 'utf8')
+
   for (const file of await readdir('./routes')) {
-    assert(file.endsWith('.md') || file.endsWith('.css'))
-    if (file.endsWith('.css')) {
-      cp(Path.resolve('routes', file), Path.resolve(OUT_DIR, file))
-      continue
-    }
+    if (file === 'layout.html') continue
+    assert(file.endsWith('.md'), `Unexpected file: ${file}`)
     const text = await readFile(Path.resolve('routes', file), 'utf8')
     const [frontmatter, remaining] = parseFrontmatter(text)
     if (frontmatter.disabled) continue
-    const parsed = parse(remaining)
     const routeName = file.replace(/\.md$/, '')
-    const hasCSS = existsSync(Path.resolve('./routes', routeName + '.css'))
     const outPath = Path.resolve(OUT_DIR, routeName + '.html')
-    const cssLink = hasCSS
-      ? `<link rel="stylesheet" href="/${routeName}.css">`
-      : ''
-    const outText = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="/">
-    ${frontmatter.title ? `<title>${frontmatter.title}</title>` : ''}
-    ${cssLink}
-</head>
-<body>
-<main>
-${parsed}
-</main>
-</body>
-</html>
-`
+
+    assert(!frontmatter.content)
+    const outText = Mustache.render(layout, {
+      ...frontmatter,
+      content: Marked.parse(remaining),
+    })
     await writeFile(outPath, outText, 'utf8')
   }
 }
