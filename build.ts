@@ -16,7 +16,8 @@ async function main() {
       continue
     }
     const text = await readFile(Path.resolve('routes', file), 'utf8')
-    const parsed = parse(text)
+    const [frontmatter, remaining] = parseFrontmatter(text)
+    const parsed = parse(remaining)
     const routeName = file.replace(/\.md$/, '')
     const hasCSS = existsSync(Path.resolve('./routes', routeName + '.css'))
     const outPath = Path.resolve(OUT_DIR, routeName + '.html')
@@ -29,6 +30,7 @@ async function main() {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="/">
+    ${frontmatter.title ? `<title>${frontmatter.title}</title>` : ''}
     ${cssLink}
 </head>
 <body>
@@ -40,6 +42,14 @@ ${parsed}
 `
     await writeFile(outPath, outText, 'utf8')
   }
+}
+function parseFrontmatter(text: string): [Record<string, string>, string] {
+  const frontmatter: Record<string, string> = {}
+  if (!text.startsWith('---\n')) {
+    return [frontmatter, text]
+  }
+  const [_, frontmatterText, ...remaining] = text.split('---\n')
+  return [JSON.parse(frontmatterText), remaining.join('---\n')]
 }
 
 await main()

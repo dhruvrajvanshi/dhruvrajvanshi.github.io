@@ -1,3 +1,8 @@
+---
+{
+  "title": "Dhruv's home page"
+}
+---
 # Welcome to Dhruv's Home Page!
 
 I build software. You can find some of my work on [Github](https://github.com/dhruvrajvanshi).
