@@ -12,30 +12,9 @@
     <main>
       {{{content}}}
     </main>
-    <script type="text/javascript" >
-      const darkMode = matchMedia('(prefers-color-scheme: dark)')
-      setPrismTheme(darkMode.matches ? 'dark' : 'light');
 
-      darkMode.addEventListener('change', event => {
-        setPrismTheme(event.matches ? 'dark' : 'light');
-      });
-      function setPrismTheme(colorscheme) {
-        const otherScheme = colorscheme === 'dark' ? 'light' : 'dark'
-        const otherLink = document.getElementById(`prisma-${otherScheme}`)
-        if (otherLink) {
-          otherLink.remove()
-        }
-        const link = document.getElementById(`prisma-${colorscheme}`)
-        if (!link) {
-          const newLink = document.createElement('link')
-          newLink.rel = 'stylesheet'
-          newLink.id = `prisma-${colorscheme}`
-          newLink.href = `/assets/prism-${colorscheme}.css`
-          document.body.appendChild(newLink)
-        }
-      }
-    </script>
     <script src="/assets/prism.js"></script>
+    <link rel="stylesheet" href="/assets/prism-onedark.css">
 
 </body>
 </html>
