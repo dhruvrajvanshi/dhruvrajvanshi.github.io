@@ -5,6 +5,7 @@ import { kill } from 'node:process'
 
 const OUT_DIR = './dist'
 const ROUTES_DIR = './routes'
+const ASSETS_DIR = './assets'
 async function main() {
   const server = spawn('npx', ['http-server', OUT_DIR, '-p', '3000'], {
     stdio: 'inherit',
@@ -12,10 +13,20 @@ async function main() {
   console.log(`Server started on http://localhost:3000`)
   try {
     await rebuild()
-    for await (const _event of watch(ROUTES_DIR, { recursive: true })) {
-      console.log(`Change detected; Rebuilding...`)
-      await rebuild()
-    }
+    await Promise.all([
+      (async () => {
+        for await (const _event of watch(ROUTES_DIR, { recursive: true })) {
+          console.log(`Change detected; Rebuilding...`)
+          await rebuild()
+        }
+      })(),
+      (async () => {
+        for await (const _event of watch(ASSETS_DIR, { recursive: true })) {
+          console.log(`Assets detected; Rebuilding...`)
+          await rebuild()
+        }
+      })(),
+    ])
   } finally {
     if (server.pid) {
       kill(server.pid)
