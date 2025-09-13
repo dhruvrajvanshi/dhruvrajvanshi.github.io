@@ -34,10 +34,9 @@ While there's nothing to validate the fact that your house is still standing.
 
 Here's an example of a "unit" test that I've seen in a lot of real codebases.
 ```javascript
-var testOrders = List.of(testOrder1, testOrder2);
 when(orderRepository.getOrdersNewerThan(recencyThresholdDate))
-    .return(testOrders);
-assert(orderService.getRecentOrders().equals(testOrders))
+    .return([testOrder1, testOrder2]);
+assert(orderService.getRecentOrders().equals([testOrder1, testOrder2]))
 
 ```
 
@@ -66,14 +65,16 @@ these tests.
 Consider this instead
 
 ```javascript
-orderRepository.createOrders(
+const ALL_ORDERS = [
     FakeOrder.withDate(today),
     FakeOrder.withDate(yesterday),
     FakeOrder.withDate(sixMonthsAgo),
-)
+]
+orderRepository.createOrders()
 
-assert(orderService.getRecentOrders()
-    .every(order -> order.date().lessThan(oneMonthAgo)))
+expect(
+    orderService.getRecentOrders()
+).equals(ALL_ORDERS.filter(it => dateMinus()))
 ```
 
 This is slightly better because the test doesn't foce `orderService` to
@@ -95,12 +96,12 @@ testHarness.request("POST /orders", [
     { security: "XYZ", amount: "5" },
     { security: "FOOBAR", amount: "7" }
 ])
-assert(
-    testHarness.request("GET /dashboard/orders").json() == [
+expect(
+    testHarness.request("GET /dashboard/orders")).equals([
         { security: "XYZ", amount: "5" },
         { security: "FOOBAR", amount: "7" }
     ]
-)
+))
 ```
 
 Now, you're starting to speak the language of your consumers.
