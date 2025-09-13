@@ -1,5 +1,5 @@
 ---
-{ "title": "The testing pyramid is wrong" }
+{ "title": "The testing pyramid is wrong", "draft": true }
 ---
 # The testing pyramid is wrong
 
