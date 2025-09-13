@@ -4,10 +4,17 @@ import assert from 'node:assert/strict'
 import * as Marked from 'marked'
 import Path from 'node:path'
 import Mustache from 'mustache'
+import { parseArgs } from 'node:util'
 
 const OUT_DIR = './dist'
+const { values: args } = parseArgs({
+  options: {
+    includeDrafts: { type: 'boolean', default: false },
+  },
+})
 async function main() {
   await mkdir(OUT_DIR, { recursive: true })
+  console.log('Building', args)
 
   await cp('./assets', Path.resolve(OUT_DIR, 'assets'), { recursive: true })
 
@@ -18,7 +25,7 @@ async function main() {
     assert(file.endsWith('.md'), `Unexpected file: ${file}`)
     const text = await readFile(Path.resolve('routes', file), 'utf8')
     const [frontmatter, remaining] = parseFrontmatter(text)
-    if (frontmatter.disabled) continue
+    if (!args.includeDrafts && frontmatter.draft) continue
     const routeName = file.replace(/\.md$/, '')
     const outPath = Path.resolve(OUT_DIR, routeName + '.html')
 

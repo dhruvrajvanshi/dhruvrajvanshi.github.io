@@ -6,10 +6,13 @@ import { kill } from 'node:process'
 const OUT_DIR = './dist'
 const ROUTES_DIR = './routes'
 async function main() {
-  const server = spawn('npx', ['http-server', OUT_DIR, '-p', '3000'])
+  const server = spawn('npx', ['http-server', OUT_DIR, '-p', '3000'], {
+    stdio: 'inherit',
+  })
+  console.log(`Server started on http://localhost:3000`)
   try {
     await rebuild()
-    for await (const event of watch(ROUTES_DIR, { recursive: true })) {
+    for await (const _event of watch(ROUTES_DIR, { recursive: true })) {
       console.log(`Change detected; Rebuilding...`)
       await rebuild()
     }
@@ -21,7 +24,8 @@ async function main() {
 }
 
 async function rebuild() {
-  console.log(`Rebuilding...`)
-  spawnSync('./build.ts')
+  spawnSync('./build.ts', ['--includeDrafts'], {
+    stdio: 'inherit',
+  })
 }
 await main()
