@@ -23,7 +23,7 @@ applications:
 When you write a test which validates an assumption, by definition, it breaks
 when that assumption no longer holds.
 
-```java
+```javascript
 assert(getCancelledOrders().every(order -> order.isCancelled()))
 ```
 
