@@ -9,6 +9,7 @@ Automated testing for frontend tests is incredibly frustrating.
 - Assertion failures are hard to understand (jest/vitest just dumps the entire DOM tree in the console).
 - They fail when refactoring.
 - They don't catch visual regressions.
+- It's difficult to translate bugs from prod into a test that fails.
 
 I've been using snapshot based playwright tests in my team for a while now and I find that
 they solve a lot of these problems.
@@ -24,9 +25,12 @@ they solve a lot of these problems.
 
 ## How I test
 I've been using [Playwright](https://playwright.dev/) for testing.
-My tests look something like this
+Here's an adapted version of an actual test which I wrote.
+This test verifies that clicking a table's header 3 times is a no-op.
+It was a real bug we saw in prod because of weird interactions between
+an internal API and @tanstack/react-query.
 
-```ts
+```js
 test("Clicking on the sort button 3 times should take the table back to the initial state", async ({ page }) => {
   const app = await buildTestApp(async app => {
     await app.addTickets(
@@ -58,66 +62,75 @@ test("Clicking on the sort button 3 times should take the table back to the init
   await expect(page).toHaveScreenshot("header-triple-click-test.png")
 })
 ```
-pull request diff. When a test fails, you can always re-run the test and open the page in the browser to debug it, all while
-having the broken screenshot to visualize what actually went wrong from the user's POV.
+Not only will it catch the bug, it will likely fail in the same way as it does in prod with a visual difference
+showing that the sort is wrong. As a bonus, this test also has a lot of "hidden" assertions like how the screen
+looks. This is something that you can't practically test with just assertions. This leads me to write
+either smoke tests or test for a bug which I've caught.
 
-Compare this to an average Jest/Vitest assertion failure when something goes wrong
+## Pain points
+This approach still has a few downsides. For one, you need to invest a bit test infrastructure. This includes
+your test case builder APIs. It's a massive temptation to set up test scenarios by using the same data structures
+as your real app. However, it's really critical that you get as close to human language as possible.
+Consider the following test helper which sets up a test app, which uses the exact same inputs as your "POST /boards"
+endpoint.
 
+```js
+const board = await createBoard({
+  slug: "WH",
+  name: "Frontend engineering",
+  settings: {
+    notifications: {
+      defaultNotificationChannels: ["Email", "App"]
+      // ...
+    },
+    // ...
+  },
+  // ...
+})
 ```
-// Example of a react-testing library assertion failure, which dumps a massive DOM snapshot
-
+While the above works, it's riddled with a lot of details which don't really affect most tests. It can break
+whenever you change the endpoint structure and it creates a lot of visual noise.
+Instead, if you add a simpler api for creating boards, which come with sane defaults, the tests will not have
+any of these problems.
+```js
+const boardResponse = await buildTestBoard(async (board) => {
+  board.name = "Frontend engineering"
+  // Other fields will default to a sensible state
+  // you only have to initialize things which are relevant to this test
+  // For example, if this test needs to check that you're enabling notifications
+  board.enableInAppNotifications()
+  board.disableEmailNotification()
+})
 ```
-Yeah, no thanks.
 
+Another issue is that you will need to maintain a "test" server which implements a fake, in-memory version
+of your REST API. I want each test to call an actual API and go through the entire request/resposne flow
+when playwright is running. Again, it's easy to just use mocks. However, mocks end up being brittle and
+it nails down your internal APIs. You'd like your tests to be immune to internal refactors. They should
+make sensible refactors cheap, not expensive.
 
-## The rest of the owl
-Just saying "Do snapshot tests" isn't really enough. There's a lot of test infrastructure investment that you need to do.
-Here's a list
-- Test harness APIs to set up various states in your app from a user's POV
-    - e.g. Instead of `setupFrontendState({ some: { nested: object: { value: "Expected" }}})`, you should have
-      actual user focused test helpers `placeOrder("BUY", "AAPL", 100)`.
-- You need to create a fake version of your backend for tests. At least a subset of the APIs that you need
-  to call in the tests. In my case, I had to implement about 10 HTTP endpoints, which read/write to in-memory `Map<ThingId, Thing>` objects.
-  All of this is about 1000 lines of code (using fastify as the web server). It took a couple of weeks, spread over a few months between
-  other work to set this up, and it still isn't complete. However, it started paying dividends within the first few days.
-- Comparing snapshots can be tricky because of OS specific differences. Most likely, your CI runs on linux and your team uses mac os.
-  This means, you'd need to run playwright in docker to update your test snapshots.
-  - I commit both mac os and linux snapshots to the repo. Both are generated locally using a single command using docker.
-    ```
-    ./scripts/update-snapshots.sh
-    # Optionally, you can pass other playwright arguments so that it only runs a subset of tests
-    ./scripts/update-snapshots.sh -g "some test name"
-    ```
-   - There's a `./scripts/run-playwright-in-docker.sh` script which runs playwright in a docker container. This is used by the above script.
-   ```
+A somewhat more technical issue is that your CI and local environment should use the same OS. In my team,
+our CI runs Linux and we use MacOS, leading to subtle visual differences. So we actually save 2 versions of
+screenshots in our git repo. Both can be generated locally using a single command `./bin/update-test-snapshots.sh`
+which runs playwright in docker if it has to. Here are a few snippets which we use to simplify this process.
 
-    docker run --name playwright-server-daemon -d \
-        --add-host=hostmachine:host-gateway \
-        -p 3000:3000 --rm --init -it \
-        --workdir /home/pwuser \
-        --user pwuser mcr.microsoft.com/playwright:v1.51.1-noble \
-        /bin/sh -c "npx -y playwright@1.51.1 run-server --port 3000 --host 0.0.0.0"
-    # Stop the docker container when done
-    trap 'docker stop playwright-server-daemon' EXIT
+## FAQ
+> Are you saying you don't need unit tests?
+No. Pure functions are really best tested in unit tests. This is a really quick way to test a lot of complex
+logic which is behind a stable and pure API.
 
-    ATTEMPTS=5
-    sleep 1
-    while ! nc -z localhost 3000; do
-        echo "Waiting for Playwright server to start..."
-        sleep 1
-        if [[ $ATTEMPTS -eq 0 ]]; then
-            echo "Playwright server failed to start after multiple attempts."
-            exit 1
-        else
-            ATTEMPTS=$((ATTEMPTS - 1))
-        fi
-    done
+> Doesn't your test suite take a lot of time?
+- Per test, kind of, but we got rid of a lot of tests so overall, our playwright suite runs quicker than our old
+  vitest based suite.
+- It's also very trivial to parallelize. Our pull request CI currently takes about 3 minutes.
+- It's trivial to run one test at a time. I usually have a playwright ui open which is automatically re-running
+  the test that I'm focused on.
 
-    echo "npx playwright test " "$@"
-    PLAYWRIGHT_IN_DOCKER=true PW_TEST_CONNECT_WS_ENDPOINT=ws://127.0.0.1:3000/ \
-        npx playwright test "$@"
+> Don't you find flakiness in the snapshots?
+Yes, but surprisingly not a lot. Most of the times, it comes from taking a screenshot too early when certain
+parts of the UI haven't loaded. But since we've put most of our external interactions into the fake server,
+such cases mainly come up only for images. We **do** have to occasionally put `waitForImageToLoad(someImage)`
+to fix this.
 
-
-   ```
-
-
+> Has it caught actual bugs?
+Yes. In the last few months, it's prevented me from shipping about a dozen bugs.
