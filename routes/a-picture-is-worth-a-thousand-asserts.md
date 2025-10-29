@@ -116,10 +116,12 @@ which runs playwright in docker if it has to. Here are a few snippets which we u
 
 ## FAQ
 > Are you saying you don't need unit tests?
+
 No. Pure functions are really best tested in unit tests. This is a really quick way to test a lot of complex
 logic which is behind a stable and pure API.
 
 > Doesn't your test suite take a lot of time?
+
 - Per test, kind of, but we got rid of a lot of tests so overall, our playwright suite runs quicker than our old
   vitest based suite.
 - It's also very trivial to parallelize. Our pull request CI currently takes about 3 minutes.
@@ -127,10 +129,12 @@ logic which is behind a stable and pure API.
   the test that I'm focused on.
 
 > Don't you find flakiness in the snapshots?
+
 Yes, but surprisingly not a lot. Most of the times, it comes from taking a screenshot too early when certain
 parts of the UI haven't loaded. But since we've put most of our external interactions into the fake server,
 such cases mainly come up only for images. We **do** have to occasionally put `waitForImageToLoad(someImage)`
 to fix this.
 
 > Has it caught actual bugs?
+
 Yes. In the last few months, it's prevented me from shipping about a dozen bugs.
