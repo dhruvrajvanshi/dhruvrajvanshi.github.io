@@ -3,13 +3,9 @@
 ---
 # A picture is worth a thousand asserts: Snapshot testing
 
-Automated testing for frontend tests is incredibly frustrating.
-
-- Test setup is complex.
-- Assertion failures are hard to understand (jest/vitest just dumps the entire DOM tree in the console).
-- They fail when refactoring.
-- They don't catch visual regressions.
-- It's difficult to translate bugs from prod into a test that fails.
+I've always found automated testing for frontend incredibly frustrating. Test setup is complex.
+Assertion failures are hard to understand. They fail when refactoring. They don't catch visual regressions.
+It's difficult to translate bugs from prod into a test that fails.
 
 I've been using snapshot based playwright tests in my team for a while now and I find that
 they solve a lot of these problems.
