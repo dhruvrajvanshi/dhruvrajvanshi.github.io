@@ -30,13 +30,22 @@ async function main() {
     const outPath = Path.resolve(OUT_DIR, routeName + '.html')
 
     assert(!frontmatter.content)
+    const tokens = Marked.lexer(remaining)
+    const title = frontmatter.title ?? extractHeading(tokens)
     const outText = Mustache.render(layout, {
       ...frontmatter,
-      content: Marked.parse(remaining),
+      title,
+      content: Marked.Parser.parse(tokens),
     })
     await writeFile(outPath, outText, 'utf8')
   }
 }
+function extractHeading(tokens: Marked.TokensList): string | undefined {
+  for (const token of tokens) {
+    if (token.type === 'heading') return token.text
+  }
+}
+
 function parseFrontmatter(text: string): [Record<string, string>, string] {
   const frontmatter: Record<string, string> = {}
   if (!text.startsWith('---\n')) {
