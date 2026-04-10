@@ -12,7 +12,7 @@ const { values: args } = parseArgs({
     includeDrafts: { type: 'boolean', default: false },
   },
 })
-const BASE_URL = 'https://rajv.dev'
+const BASE_URL = 'https://www.rajv.dev'
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true })
