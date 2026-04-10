@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "./build.ts"
+    "build": "./build.ts",
+    "dev": "./dev.ts"
   },
   "devDependencies": {
     "@types/mustache": "^4.2.6",
