@@ -12,6 +12,8 @@ const { values: args } = parseArgs({
     includeDrafts: { type: 'boolean', default: false },
   },
 })
+const BASE_URL = 'https://rajv.dev'
+
 async function main() {
   await mkdir(OUT_DIR, { recursive: true })
   console.log('Building', args)
@@ -19,6 +21,7 @@ async function main() {
   await cp('./assets', Path.resolve(OUT_DIR, 'assets'), { recursive: true })
 
   const layout = await readFile('./routes/layout.html', 'utf8')
+  const routeNames: string[] = []
 
   for (const file of await readdir('./routes')) {
     if (file === 'layout.html') continue
@@ -27,6 +30,7 @@ async function main() {
     const [frontmatter, remaining] = parseFrontmatter(text)
     if (!args.includeDrafts && frontmatter.draft) continue
     const routeName = file.replace(/\.md$/, '')
+    routeNames.push(routeName)
     const outPath = Path.resolve(OUT_DIR, routeName + '.html')
 
     assert(!frontmatter.content)
@@ -39,6 +43,17 @@ async function main() {
     })
     await writeFile(outPath, outText, 'utf8')
   }
+
+  await generateSitemap(routeNames)
+}
+
+async function generateSitemap(routeNames: string[]) {
+  const urls = routeNames.map((name) => {
+    const path = name === 'index' ? '/' : `/${name}.html`
+    return `  <url><loc>${BASE_URL}${path}</loc></url>`
+  })
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`
+  await writeFile(Path.resolve(OUT_DIR, 'sitemap.xml'), xml, 'utf8')
 }
 function extractHeading(tokens: Marked.TokensList): string | undefined {
   for (const token of tokens) {
