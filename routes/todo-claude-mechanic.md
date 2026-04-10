@@ -1,7 +1,3 @@
----
-{ "title": "// TODO(claude): Mechanize this" }
----
-
 # // TODO(claude): Mechanize this
 
 I've been using this technique for getting AI to do very mechanical
