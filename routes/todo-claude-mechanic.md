@@ -10,7 +10,8 @@ jobs without having to prompt super elaborately.
 
 Place a comment like this in the file where it makes most sense.
 ```js
-// TODO(claude): Describe your prompt succinctly. Let it infer from local context
+// TODO(claude): Describe your prompt succinctly.
+//               Let it infer from local context
 ```
 
 Place it close to the _this_, _thats_ and _those_ words you need in your prompt.
