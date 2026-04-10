@@ -16,7 +16,11 @@ Place a comment like this in the file where it makes most sense.
 
 Place it close to the _this_, _thats_ and _those_ words you need in your prompt.
 
-Then run claude and ask it to complete the TODO(claude) in @...fuzzy search your file name. Ask follow up questions if you think that the task is not super mechanical.
+Then run claude cli and prompt
+
+> Complete the TODO(claude) in @FileName.ts.
+> Ask follow up questions if you think that the task is
+> not super mechanical.
 
 What I like about this approach is that I have to be less elaborate about my prompt,
 and claude behaves less surprisingly. Usually, the source location of the prompt
