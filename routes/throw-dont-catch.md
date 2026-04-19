@@ -38,4 +38,11 @@ convert exceptions into an HTTP status code, or a core dump, whichever makes sen
 
 It's important that you don't do too much logic based on the specific type of exception
 that was thrown here. This is what programmers who hate this type of stuff call "hidden
-control flow".
+control flow". Avoid it to avoid surprises.
+
+## There may be exceptions
+to this rule.
+An API that you don't control may use exceptions to signal different types of
+return values. You should catch these as close to the call site as possible.
+Then, in the catch branch, either convert it into an error code structure that
+makes sense.
