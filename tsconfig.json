@@ -6,6 +6,7 @@
     "target": "es2022",
     "module": "nodenext",
     "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
   }
 }

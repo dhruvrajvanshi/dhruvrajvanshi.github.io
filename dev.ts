@@ -16,13 +16,29 @@ async function main() {
     await Promise.all([
       (async () => {
         for await (const _event of watch(ROUTES_DIR, { recursive: true })) {
-          console.log(`Change detected; Rebuilding...`)
+          console.log(`Routes changed; Rebuilding...`)
           await rebuild()
         }
       })(),
       (async () => {
         for await (const _event of watch(ASSETS_DIR, { recursive: true })) {
-          console.log(`Assets detected; Rebuilding...`)
+          console.log(`Assets changed; Rebuilding...`)
+          await rebuild()
+        }
+      })(),
+      (async () => {
+        for await (const _event of watch('template_helpers.ts', {
+          recursive: true,
+        })) {
+          console.log(`Helpers changed; Rebuilding...`)
+          await rebuild()
+        }
+      })(),
+      (async () => {
+        for await (const _event of watch('build.ts', {
+          recursive: true,
+        })) {
+          console.log(`build script changed; Rebuilding...`)
           await rebuild()
         }
       })(),

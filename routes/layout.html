@@ -23,14 +23,14 @@
         }
       </style>
       <nav class="recent-posts">
-        {{#routes.p}}
+        {{#helperData.recentPosts}}
           <div>
             <a href="{{{path}}}">{{{frontmatter.title}}}</a>
             {{#frontmatter.published_on}}
               - <date>{{{frontmatter.published_on}}}</date>
             {{/frontmatter.published_on}}
           </div>
-        {{/routes.p}}
+        {{/helperData.recentPosts}}
       </nav>
     </main>
 

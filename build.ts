@@ -13,6 +13,7 @@ import * as Marked from 'marked'
 import Path from 'node:path'
 import Mustache from 'mustache'
 import { parseArgs } from 'node:util'
+import { existsSync } from 'node:fs'
 
 const OUT_DIR = './dist'
 const { values: args } = parseArgs({
@@ -82,36 +83,36 @@ async function main() {
   await cp('./assets', Path.resolve(OUT_DIR, 'assets'), { recursive: true })
 
   const routes = await collectRoutes('./routes')
-  const routeTree = await buildRouteTree(routes)
+  let helperData: Record<string, unknown> = {}
+  if (existsSync('./template_helpers.ts')) {
+    const helpers = await import('./template_helpers.ts')
+    const routesWithFrontmatter = await Promise.all(
+      routes.map(async (route) => {
+        const templateText = await readFile(route.templatePath, 'utf8')
+        const [frontmatter] = parseFrontmatter(templateText)
+        return {
+          ...route,
+          frontmatter,
+        }
+      }),
+    )
+    for (const [name, fn] of Object.entries(helpers)) {
+      assert(typeof fn === 'function', `Helper ${name} is not a function`)
+      console.log(`Generating helperData.${name}...`)
+      helperData[name] = fn({ routes: routesWithFrontmatter })
+    }
+  }
   for (const route of routes) {
-    await generateRoute(routeTree, route)
+    await generateRoute(helperData, route)
   }
 
   await generateSitemap(routes)
 }
-interface RouteTreeItem {
-  path: `/${string}`
-  frontmatter: Record<string, string>
-}
-type RouteTree = Record<string, RouteTreeItem[]>
-async function buildRouteTree(routes: Route[]): Promise<RouteTree> {
-  const groups: Record<string, RouteTreeItem[]> = {}
-  for (const route of routes) {
-    const group = route.urlPath.split('/')[1] || 'root'
-    if (!groups[group]) {
-      groups[group] = []
-    }
-    const templateText = await readFile(route.templatePath, 'utf8')
-    const [frontmatter] = parseFrontmatter(templateText)
-    if (frontmatter.draft && !args.includeDrafts) continue
-    groups[group].push({
-      path: route.urlPath,
-      frontmatter: frontmatter,
-    })
-  }
-  return groups
-}
-async function generateRoute(routeTree: RouteTree, route: Route) {
+
+async function generateRoute(
+  helperData: Record<string, unknown>,
+  route: Route,
+) {
   assert(
     route.templatePath.endsWith('.md'),
     `Unexpected template: ${route.templatePath}`,
@@ -138,7 +139,7 @@ async function generateRoute(routeTree: RouteTree, route: Route) {
       ? Marked.Parser.parse(titleTokens)
       : undefined,
     content_body: Marked.Parser.parse(bodyTokens),
-    routes: routeTree,
+    helperData,
   })
   await writeFile(outPath, outText, 'utf8')
 }
@@ -180,12 +181,19 @@ function splitContentAndBody(tokens: Marked.TokensList): {
   return { titleTokens, bodyTokens }
 }
 
-function parseFrontmatter(text: string): [Record<string, string>, string] {
+interface Frontmatter {
+  title: string
+  published_on?: string
+  draft?: boolean
+  [key: string]: unknown
+}
+function parseFrontmatter(text: string): [Frontmatter, string] {
   if (!text.startsWith('---\n')) {
     const tokens = Marked.lexer(text)
 
-    const frontmatter: Record<string, string> = {}
-    frontmatter.title = extractHeading(tokens) ?? ''
+    const frontmatter: Frontmatter = {
+      title: extractHeading(tokens) ?? '',
+    }
     return [frontmatter, text]
   }
   const [_, frontmatterText, ...remainingArr] = text.split('---\n')
