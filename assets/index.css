@@ -517,17 +517,12 @@ body {
 }
 
 body {
-  background-color: var(--color-neutral-50);
+  background-color: light-dark(var(--color-neutral-50), var(--color-neutral-200));
   color: var(--color-neutral-900);
-}
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: var(--color-neutral-200);
-  }
 }
 
 a {
-  color: var(--color-fuchsia-500);
+  color: var(--color-cyan-500);
 }
 a:visited {
   color: var(--color-cyan-800);
@@ -549,7 +544,6 @@ blockquote {
 }
 
 pre:has(> code) {
-  background: var(--color-gray-50);
   padding: 1em;
   border-radius: 8px;
   overflow-x: auto;
