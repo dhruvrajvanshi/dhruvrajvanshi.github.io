@@ -1,10 +1,19 @@
 #!/usr/bin/env node
-import { readdir, readFile, mkdir, writeFile, cp } from 'node:fs/promises'
+import {
+  readdir,
+  readFile,
+  mkdir,
+  writeFile,
+  cp,
+  open,
+  type FileHandle,
+} from 'node:fs/promises'
 import assert from 'node:assert/strict'
 import * as Marked from 'marked'
 import Path from 'node:path'
 import Mustache from 'mustache'
 import { parseArgs } from 'node:util'
+import { existsSync } from 'node:fs'
 
 const OUT_DIR = './dist'
 const { values: args } = parseArgs({
@@ -14,56 +23,114 @@ const { values: args } = parseArgs({
 })
 const BASE_URL = 'https://www.rajv.dev'
 
+interface Route {
+  templatePath: string
+  layoutPath: string
+  urlPath: `/${string}`
+}
+async function collectRoutes(baseDir: string): Promise<Route[]> {
+  const resultRoutes: Omit<Route, 'urlPath'>[] = []
+  const layoutStack: string[] = []
+  await visit(baseDir)
+  return resultRoutes.map((route) => ({
+    templatePath: route.templatePath,
+    layoutPath: route.layoutPath,
+    urlPath: `/${Path.relative(baseDir, route.templatePath.replace(/\.md$/, ''))}`,
+  }))
+
+  function layoutPath() {
+    const layout = layoutStack.at(-1)
+    if (!layout) throw new Error('No layout found')
+    return layout
+  }
+
+  async function visit(path: string) {
+    const file = await open(path)
+    const stat = await file.stat()
+    if (stat.isDirectory()) {
+      await visitDir(path)
+    } else {
+      await visitFile(path, file)
+    }
+  }
+  async function visitDir(path: string) {
+    const entries = await readdir(path)
+
+    const layout = entries.find((e) => e === 'layout.html')
+    if (layout) {
+      layoutStack.push(Path.join(path, layout))
+    }
+
+    for (const entry of entries) {
+      await visit(Path.resolve(path, entry))
+    }
+  }
+  async function visitFile(path: string, file: FileHandle) {
+    if (path.endsWith('layout.html')) return
+    if (path.endsWith('.md')) {
+      resultRoutes.push({
+        templatePath: path,
+        layoutPath: layoutPath(),
+      })
+    }
+  }
+}
+
 async function main() {
   await mkdir(OUT_DIR, { recursive: true })
   console.log('Building', args)
 
   await cp('./assets', Path.resolve(OUT_DIR, 'assets'), { recursive: true })
 
-  const layout = await readFile('./routes/layout.html', 'utf8')
-  const routeNames: string[] = []
-
-  for (const file of await readdir('./routes')) {
-    if (file === 'layout.html') continue
-    assert(file.endsWith('.md'), `Unexpected file: ${file}`)
-    const text = await readFile(Path.resolve('routes', file), 'utf8')
-    const [frontmatter, remaining] = parseFrontmatter(text)
-    if (!args.includeDrafts && frontmatter.draft) continue
-    const routeName = file.replace(/\.md$/, '')
-    routeNames.push(routeName)
-    const outPath = Path.resolve(OUT_DIR, routeName + '.html')
-
-    assert(!frontmatter.content)
-    if (frontmatter.published_on) {
-      const date = new Date(frontmatter.published_on)
-      frontmatter.published_on = date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    }
-    const tokens = Marked.lexer(remaining)
-    const title = frontmatter.title ?? extractHeading(tokens)
-    const { titleTokens, bodyTokens } = splitContentAndBody(tokens)
-    const outText = Mustache.render(layout, {
-      ...frontmatter,
-      frontmatter,
-      title,
-      content: Marked.Parser.parse(tokens),
-      content_title: titleTokens.length
-        ? Marked.Parser.parse(titleTokens)
-        : undefined,
-      content_body: Marked.Parser.parse(bodyTokens),
-    })
-    await writeFile(outPath, outText, 'utf8')
+  const routes = await collectRoutes('./routes')
+  for (const route of routes) {
+    await generateRoute(route)
   }
 
-  await generateSitemap(routeNames)
+  await generateSitemap(routes)
+}
+async function generateRoute(route: Route) {
+  assert(
+    route.templatePath.endsWith('.md'),
+    `Unexpected template: ${route.templatePath}`,
+  )
+  const templateText = await readFile(route.templatePath, 'utf8')
+  const [frontmatter, remaining] = parseFrontmatter(templateText)
+  if (!args.includeDrafts && frontmatter.draft) return
+  await mkdir(Path.dirname(Path.join(OUT_DIR, route.urlPath)), {
+    recursive: true,
+  })
+  const outPath = Path.join(OUT_DIR, route.urlPath + '.html')
+
+  assert(!frontmatter.content)
+  if (frontmatter.published_on) {
+    const date = new Date(frontmatter.published_on)
+    frontmatter.published_on = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  }
+  const tokens = Marked.lexer(remaining)
+  const title = frontmatter.title ?? extractHeading(tokens)
+  const { titleTokens, bodyTokens } = splitContentAndBody(tokens)
+  const layout = await readFile(route.layoutPath, 'utf8')
+  const outText = Mustache.render(layout, {
+    ...frontmatter,
+    frontmatter,
+    title,
+    content: Marked.Parser.parse(tokens),
+    content_title: titleTokens.length
+      ? Marked.Parser.parse(titleTokens)
+      : undefined,
+    content_body: Marked.Parser.parse(bodyTokens),
+  })
+  await writeFile(outPath, outText, 'utf8')
 }
 
-async function generateSitemap(routeNames: string[]) {
-  const urls = routeNames.map((name) => {
-    const path = name === 'index' ? '/' : `/${name}.html`
+async function generateSitemap(routes: Route[]) {
+  const urls = routes.map(({ urlPath: name }) => {
+    const path = name === '/index' ? '/' : `${name}.html`
     return `  <url><loc>${BASE_URL}${path}</loc></url>`
   })
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`
