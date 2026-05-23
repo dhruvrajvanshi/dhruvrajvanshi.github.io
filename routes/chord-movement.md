@@ -29,7 +29,7 @@ about moving up and down fifths here. By using B as a bass note of the
 chord, you can treat the whole thing as a walk down the scale.
 C to B and then down to Am.
 
-It's Am, not major because that's in the key of C. But don't get
+It's A minor, not major because that's in the key of C. But don't get
 hung up on the colors yet, think of the bassline first.
 You can try major, minor and something more exotic after you've figured the
 movement of the bass.
