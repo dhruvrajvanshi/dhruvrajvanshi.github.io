@@ -4,7 +4,7 @@
 # Chords move in predictable ways
 
 They go up or down in whole or half steps.
-They may leap across the key to a fourth or a fifth.
+They may leap across to a fourth or a fifth.
 They usually try to use notes in the key where possible but
 it's common to use chords or notes that don't fit the key.
 
