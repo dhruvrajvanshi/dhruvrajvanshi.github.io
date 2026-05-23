@@ -3,10 +3,10 @@
 ---
 # Chords move in predictable ways
 
-Go up or down in steps or half.
-You may leap across the key to a fourth or a fifth.
-Try to use the notes in the key where possible but
-don't be afraid to ignore the key center.
+They go up or down in whole or half steps.
+They may leap across the key to a fourth or a fifth.
+They usually try to use notes in the key where possible but
+it's common to use chords or notes that don't fit the key.
 
 This simple rule of thumb doesn't explain all music,
 but it captures a surprising amount.
