@@ -15,7 +15,26 @@
       <time class="dim">{{{frontmatter.published_on}}}</time>
       {{/frontmatter.published_on}}
       {{{content_body}}}
+
+      <h2>Recent posts</h2>
+      <style>
+        .recent-posts {
+          display: grid;
+        }
+      </style>
+      <nav class="recent-posts">
+        {{#routes.p}}
+          <div>
+            <a href="{{{path}}}">{{{frontmatter.title}}}</a>
+            {{#frontmatter.published_on}}
+              - <date>{{{frontmatter.published_on}}}</date>
+            {{/frontmatter.published_on}}
+          </div>
+        {{/routes.p}}
+      </nav>
     </main>
+
+
 
     <script src="/assets/prism.js"></script>
     <link rel="stylesheet" href="/assets/prism-onedark.css">

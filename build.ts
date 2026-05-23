@@ -13,7 +13,6 @@ import * as Marked from 'marked'
 import Path from 'node:path'
 import Mustache from 'mustache'
 import { parseArgs } from 'node:util'
-import { existsSync } from 'node:fs'
 
 const OUT_DIR = './dist'
 const { values: args } = parseArgs({
@@ -83,13 +82,35 @@ async function main() {
   await cp('./assets', Path.resolve(OUT_DIR, 'assets'), { recursive: true })
 
   const routes = await collectRoutes('./routes')
+  const routeTree = await buildRouteTree(routes)
   for (const route of routes) {
-    await generateRoute(route)
+    await generateRoute(routeTree, route)
   }
 
   await generateSitemap(routes)
 }
-async function generateRoute(route: Route) {
+interface RouteTreeItem {
+  path: `/${string}`
+  frontmatter: Record<string, string>
+}
+type RouteTree = Record<string, RouteTreeItem[]>
+async function buildRouteTree(routes: Route[]): Promise<RouteTree> {
+  const groups: Record<string, RouteTreeItem[]> = {}
+  for (const route of routes) {
+    const group = route.urlPath.split('/')[1] || 'root'
+    if (!groups[group]) {
+      groups[group] = []
+    }
+    const templateText = await readFile(route.templatePath, 'utf8')
+    const [frontmatter] = parseFrontmatter(templateText)
+    groups[group].push({
+      path: route.urlPath,
+      frontmatter: frontmatter,
+    })
+  }
+  return groups
+}
+async function generateRoute(routeTree: RouteTree, route: Route) {
   assert(
     route.templatePath.endsWith('.md'),
     `Unexpected template: ${route.templatePath}`,
@@ -103,14 +124,6 @@ async function generateRoute(route: Route) {
   const outPath = Path.join(OUT_DIR, route.urlPath + '.html')
 
   assert(!frontmatter.content)
-  if (frontmatter.published_on) {
-    const date = new Date(frontmatter.published_on)
-    frontmatter.published_on = date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  }
   const tokens = Marked.lexer(remaining)
   const title = frontmatter.title ?? extractHeading(tokens)
   const { titleTokens, bodyTokens } = splitContentAndBody(tokens)
@@ -124,6 +137,7 @@ async function generateRoute(route: Route) {
       ? Marked.Parser.parse(titleTokens)
       : undefined,
     content_body: Marked.Parser.parse(bodyTokens),
+    routes: routeTree,
   })
   await writeFile(outPath, outText, 'utf8')
 }
@@ -166,12 +180,29 @@ function splitContentAndBody(tokens: Marked.TokensList): {
 }
 
 function parseFrontmatter(text: string): [Record<string, string>, string] {
-  const frontmatter: Record<string, string> = {}
   if (!text.startsWith('---\n')) {
+    const tokens = Marked.lexer(text)
+
+    const frontmatter: Record<string, string> = {}
+    frontmatter.title = extractHeading(tokens) ?? ''
     return [frontmatter, text]
   }
-  const [_, frontmatterText, ...remaining] = text.split('---\n')
-  return [JSON.parse(frontmatterText), remaining.join('---\n')]
+  const [_, frontmatterText, ...remainingArr] = text.split('---\n')
+  const remaining = remainingArr.join('---\n')
+  const frontmatter = JSON.parse(frontmatterText)
+  if (frontmatter.published_on) {
+    const date = new Date(frontmatter.published_on)
+    frontmatter.published_on = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  }
+  if (!frontmatter.title) {
+    const tokens = Marked.lexer(remaining)
+    frontmatter.title = extractHeading(tokens) ?? ''
+  }
+  return [frontmatter, remaining]
 }
 
 await main()
