@@ -9,8 +9,9 @@ Try to use the notes in the key where possible but
 don't be afraid to ignore the key center.
 
 This simple rule of thumb doesn't explain all music,
-but it captures a surprising amount. The biggest
-gain to me was being able to transcribe songs with lots of
+but it captures a surprising amount.
+
+This rule helps me transcribe songs with lots of
 chords in them. It's fairly easy to think about the next chord
 as one of these 2 types of movements, instead of all the possible
 chords that you can play.
