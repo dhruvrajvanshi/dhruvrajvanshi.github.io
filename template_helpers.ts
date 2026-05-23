@@ -6,8 +6,13 @@ interface Frontmatter {
 export function recentPosts(ctx: {
   routes: { urlPath: string; frontmatter: Frontmatter }[]
 }) {
-  const posts = ctx.routes.filter(
-    (route) => route.urlPath.startsWith('/p/') && !route.frontmatter.draft,
-  )
+  const posts = ctx.routes
+    .filter(
+      (route) => route.urlPath.startsWith('/p/') && !route.frontmatter.draft,
+    )
+    .map((route) => ({
+      ...route,
+      href: route.urlPath,
+    }))
   return posts
 }

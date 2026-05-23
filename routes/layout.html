@@ -25,7 +25,7 @@
       <nav class="recent-posts">
         {{#helperData.recentPosts}}
           <div>
-            <a href="{{{path}}}">{{{frontmatter.title}}}</a>
+            <a href="{{{href}}}">{{{frontmatter.title}}}</a>
             {{#frontmatter.published_on}}
               - <date>{{{frontmatter.published_on}}}</date>
             {{/frontmatter.published_on}}
