@@ -36,12 +36,13 @@ You can try major, minor or something more exotic after you've figured out the b
 
 The jump to G is also a simple whole step down and so is the next one to F.
 
-The first interesting jump comes when the F goes to Bb. It's interesting because
-it's the first leap across the scale to a fourth. Another thing that makes
-it cool is that Bb is not in the key of C so it gives it more intrigue than
-your usual chords in the key. You might call this a "Borrowed chord" from the
-Mixolydian mode, but I find that a bit jargony. It's easier to think the 2 ways
-the bassline can move, instead of trying to make sense of the pratically infinite
-universe of chords around a key center.
+The jump from F to Bb is really interesting. It's the first leap
+across the scale to a fourth. It's also cool because Bb is not in
+the key of C so it gives it more colorful sound than the usual chords
+in the key. You might call this a "Borrowed chord" from the
+Mixolydian mode, but I find that jargony and not as useful for analysis.
+It's easier to think the 2 ways the bassline can move, instead of
+trying to make sense of the pratically infinite universe of chords
+around a key center.
 
 After the Bb, it goes back up to the original C. Neat.
