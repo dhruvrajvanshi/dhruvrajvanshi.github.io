@@ -103,6 +103,7 @@ async function buildRouteTree(routes: Route[]): Promise<RouteTree> {
     }
     const templateText = await readFile(route.templatePath, 'utf8')
     const [frontmatter] = parseFrontmatter(templateText)
+    if (frontmatter.draft && !args.includeDrafts) continue
     groups[group].push({
       path: route.urlPath,
       frontmatter: frontmatter,
