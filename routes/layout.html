@@ -10,7 +10,11 @@
 </head>
 <body>
     <main>
-      {{{content}}}
+      <h1>{{{content_title}}}</h1>
+      {{#frontmatter.published_on}}
+      <p>{{{frontmatter.published_on}}}</p>
+      {{/frontmatter.published_on}}
+      {{{content_body}}}
     </main>
 
     <script src="/assets/prism.js"></script>

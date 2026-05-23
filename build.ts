@@ -34,12 +34,26 @@ async function main() {
     const outPath = Path.resolve(OUT_DIR, routeName + '.html')
 
     assert(!frontmatter.content)
+    if (frontmatter.published_on) {
+      const date = new Date(frontmatter.published_on)
+      frontmatter.published_on = date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    }
     const tokens = Marked.lexer(remaining)
     const title = frontmatter.title ?? extractHeading(tokens)
+    const { titleTokens, bodyTokens } = splitContentAndBody(tokens)
     const outText = Mustache.render(layout, {
       ...frontmatter,
+      frontmatter,
       title,
       content: Marked.Parser.parse(tokens),
+      content_title: titleTokens.length
+        ? Marked.Parser.parse(titleTokens)
+        : undefined,
+      content_body: Marked.Parser.parse(bodyTokens),
     })
     await writeFile(outPath, outText, 'utf8')
   }
@@ -59,6 +73,29 @@ function extractHeading(tokens: Marked.TokensList): string | undefined {
   for (const token of tokens) {
     if (token.type === 'heading') return token.text
   }
+}
+
+function splitContentAndBody(tokens: Marked.TokensList): {
+  titleTokens: Marked.TokensList
+  bodyTokens: Marked.TokensList
+} {
+  const firstHeading = tokens.findIndex((t) => t.type === 'heading')
+  if (firstHeading === -1) {
+    return {
+      titleTokens: Object.assign([], {
+        links: tokens.links,
+      }) as Marked.TokensList,
+      bodyTokens: tokens,
+    }
+  }
+  const titleTokens = Object.assign([tokens[firstHeading]], {
+    links: tokens.links,
+  }) as Marked.TokensList
+  const bodyTokens = Object.assign(
+    tokens.slice(0, firstHeading).concat(tokens.slice(firstHeading + 1)),
+    { links: tokens.links },
+  ) as Marked.TokensList
+  return { titleTokens, bodyTokens }
 }
 
 function parseFrontmatter(text: string): [Record<string, string>, string] {
