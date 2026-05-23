@@ -31,8 +31,7 @@ C to B and then down to Am.
 
 It's A minor, not major because that's in the key of C. But don't get
 hung up on the colors yet, think of the bassline first.
-You can try major, minor and something more exotic after you've figured the
-movement of the bass.
+You can try major, minor or something more exotic after you've figured out the bassline.
 
 The jump to G is also a simple whole step down and so is the next one to F.
 
