@@ -10,6 +10,7 @@ In Speak to me (Breathe), the verse loops through
 these 2 chords in the key of Em.
 
 > (Em)Breathe, breathe in the (A7)air
+>
 > (Em)Don't be afraid to (A7) care
 
 At the end of Time, the next track, it goes back to the exact same
@@ -17,6 +18,7 @@ verse and chorus with different lyrics, recalling the exact
 same progression.
 
 > (Em)Home, home a(A7)gain
+>
 > (Em)I like to be here when I (A7)can
 
 The Great Gig in the Sky starts with Rick Wright going
