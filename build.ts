@@ -21,7 +21,22 @@ const { values: args } = parseArgs({
     includeDrafts: { type: 'boolean', default: false },
   },
 })
+
 const BASE_URL = 'https://www.rajv.dev'
+async function main() {
+  await mkdir(OUT_DIR, { recursive: true })
+  console.log('Building', args)
+
+  await cp('./assets', Path.resolve(OUT_DIR, 'assets'), { recursive: true })
+
+  const routes = await collectRoutes('./routes')
+  const helperData = await runHelpers(routes)
+  for (const route of routes) {
+    await generateRoute(helperData, route)
+  }
+
+  await generateSitemap(routes)
+}
 
 interface Route {
   templatePath: string
@@ -76,20 +91,6 @@ async function collectRoutes(baseDir: string): Promise<Route[]> {
   }
 }
 
-async function main() {
-  await mkdir(OUT_DIR, { recursive: true })
-  console.log('Building', args)
-
-  await cp('./assets', Path.resolve(OUT_DIR, 'assets'), { recursive: true })
-
-  const routes = await collectRoutes('./routes')
-  const helperData = await runHelpers(routes)
-  for (const route of routes) {
-    await generateRoute(helperData, route)
-  }
-
-  await generateSitemap(routes)
-}
 async function runHelpers(routes: Route[]) {
   let helperData: Record<string, unknown> = {}
   if (existsSync('./template_helpers.ts')) {
