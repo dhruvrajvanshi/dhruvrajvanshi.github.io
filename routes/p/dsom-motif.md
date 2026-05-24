@@ -44,6 +44,6 @@ seem like a sequence of unrelated songs, but one big piece
 of music that's supposed to be consumed in one go. On top
 of the recurring chord motif, there are sound samples
 that recur, like the haunting, uncomfortable laughter
-at the beginning of the album and in Brain Damage, near
+at the beginning of the album and in Brain Damage near
 the end. There are also repeated lyrical patterns that
 connect Breathe to Eclipse.
