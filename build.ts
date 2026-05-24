@@ -172,17 +172,17 @@ function splitContentAndBody(tokens: Marked.TokensList): {
     return {
       titleTokens: Object.assign([], {
         links: tokens.links,
-      }) as Marked.TokensList,
+      }),
       bodyTokens: tokens,
     }
   }
   const titleTokens = Object.assign([tokens[firstHeading]], {
     links: tokens.links,
-  }) as Marked.TokensList
+  })
   const bodyTokens = Object.assign(
     tokens.slice(0, firstHeading).concat(tokens.slice(firstHeading + 1)),
     { links: tokens.links },
-  ) as Marked.TokensList
+  )
   return { titleTokens, bodyTokens }
 }
 
