@@ -34,7 +34,7 @@ in different contexts?
 
 Finally, Any Colour You Like is essentially a big improv through
 the same i->IV7 progression, again in the key of Em. This one
-also feels very different from the other ones. It's like a
+also feels very different from the others. It's like a
 funk/prog/rock mash up of synths and guitars which seems like a
 love letter to the 70s. Same 2 chords, different meaning.
 
