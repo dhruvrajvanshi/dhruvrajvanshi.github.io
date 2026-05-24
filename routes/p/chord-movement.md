@@ -4,8 +4,8 @@
 # Chords move in predictable ways
 
 They go up or down in whole or half steps.
-They may leap across to a fourth or a fifth.
-They usually use the notes from the key where but often don't.
+They may leap to a fourth or a fifth.
+They usually use the notes from the key but often don't.
 When done in moderation, this creates interesting tension and release.
 
 This simple rule of thumb doesn't explain all music,
