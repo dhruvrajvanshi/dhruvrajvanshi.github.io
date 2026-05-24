@@ -47,3 +47,12 @@ that recur, like the haunting, uncomfortable laughter
 at the beginning of the album and in Brain Damage near
 the end. There are also repeated lyrical patterns that
 connect Breathe to Eclipse.
+
+With the knowledge of all this, it's not hard to appreciate
+why Dark Side of the Moon is considered one of the greatest
+albums of all time, not just in its genre. It was never
+my favourite Pink Floyd records, that one is Wish You Were
+Here. But if I had to pick one which shows the band's best
+work, it would be Dark Side. Maybe some day, I'd be able
+to put into words why Wish You Were Here means more to me.
+Till then, it's still good to appreciate the Dark Side.
