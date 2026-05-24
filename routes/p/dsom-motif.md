@@ -4,7 +4,9 @@
 # The secret motif running through Dark Side of the Moon
 
 There's a 2 chord vamp that runs through Pink Floyd's Dark
-Side of the Moon. It's a i -> IV7 chord progression.
+Side of the Moon. It's one of the many things that connects
+the different songs of the album. I want to talk about it
+because it might be interesting to you too.
 
 In Speak to me (Breathe), the verse loops through
 these 2 chords in the key of Em.
