@@ -83,6 +83,14 @@ async function main() {
   await cp('./assets', Path.resolve(OUT_DIR, 'assets'), { recursive: true })
 
   const routes = await collectRoutes('./routes')
+  const helperData = await runHelpers(routes)
+  for (const route of routes) {
+    await generateRoute(helperData, route)
+  }
+
+  await generateSitemap(routes)
+}
+async function runHelpers(routes: Route[]) {
   let helperData: Record<string, unknown> = {}
   if (existsSync('./template_helpers.ts')) {
     const helpers = await import('./template_helpers.ts')
@@ -102,11 +110,7 @@ async function main() {
       helperData[name] = fn({ routes: routesWithFrontmatter })
     }
   }
-  for (const route of routes) {
-    await generateRoute(helperData, route)
-  }
-
-  await generateSitemap(routes)
+  return helperData
 }
 
 async function generateRoute(
