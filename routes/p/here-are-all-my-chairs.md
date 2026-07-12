@@ -15,8 +15,5 @@ How do I have lunch? I grab a chair from the chair area and bring it to the dini
 Then I go to the tables area and grab my dining table, move it across the hall and put it
 in the dining area. Have lunch, put everything back in its spot and I'm done. Easy peasy.
 
-Same deal for sleeping. Bring the bed and mattress to the sleeping area, take a nap and
-put them back in their place.
-
 I'm the most organised person I know. This is the architecture of my home. Feel free to 
 copy this in if you want to be clean and organised like me.
