@@ -1,17 +1,26 @@
 @font-face {
-    font-family: "TNY Adobe Caslon Pro Regular";
-    src: url("https://db.onlinewebfonts.com/t/68e94a17c3e618dbe0936fcbf25b26c6.eot");
-    src: url("https://db.onlinewebfonts.com/t/68e94a17c3e618dbe0936fcbf25b26c6.eot?#iefix")format("embedded-opentype"),
-    url("https://db.onlinewebfonts.com/t/68e94a17c3e618dbe0936fcbf25b26c6.woff2")format("woff2"),
-    url("https://db.onlinewebfonts.com/t/68e94a17c3e618dbe0936fcbf25b26c6.woff")format("woff"),
-    url("https://db.onlinewebfonts.com/t/68e94a17c3e618dbe0936fcbf25b26c6.ttf")format("truetype"),
-    url("https://db.onlinewebfonts.com/t/68e94a17c3e618dbe0936fcbf25b26c6.svg#TNY Adobe Caslon Pro Regular")format("svg");
+  font-family: 'TNY Adobe Caslon Pro Regular';
+  src: url('https://db.onlinewebfonts.com/t/68e94a17c3e618dbe0936fcbf25b26c6.eot');
+  src:
+    url('https://db.onlinewebfonts.com/t/68e94a17c3e618dbe0936fcbf25b26c6.eot?#iefix')
+      format('embedded-opentype'),
+    url('https://db.onlinewebfonts.com/t/68e94a17c3e618dbe0936fcbf25b26c6.woff2')
+      format('woff2'),
+    url('https://db.onlinewebfonts.com/t/68e94a17c3e618dbe0936fcbf25b26c6.woff')
+      format('woff'),
+    url('https://db.onlinewebfonts.com/t/68e94a17c3e618dbe0936fcbf25b26c6.ttf')
+      format('truetype'),
+    url('https://db.onlinewebfonts.com/t/68e94a17c3e618dbe0936fcbf25b26c6.svg#TNY Adobe Caslon Pro Regular')
+      format('svg');
 }
 html,
 body {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-serif: 'TNY Adobe Caslon Pro Regular', -apple-system-ui-serif, ui-serif, "Spectral", "Georgia", serif;
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-serif:
+    'TNY Adobe Caslon Pro Regular', -apple-system-ui-serif, ui-serif,
+    'Spectral', 'Georgia', serif;
 
   font-family: var(--font-serif);
   line-height: 1.6em;
@@ -294,7 +303,6 @@ body {
   }
 }
 
-
 a {
   color: var(--color-link-default);
   &:visited {
@@ -302,11 +310,10 @@ a {
   }
 }
 
-
 main {
-  max-width: 568px;
+  max-width: 100ch;
   margin: 0 auto;
-  padding: 1em;
+  padding: 0.6rem;
 }
 blockquote {
   border-left: 4px solid var(--color-blockquote-border);
