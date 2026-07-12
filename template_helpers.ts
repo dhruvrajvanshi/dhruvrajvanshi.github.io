@@ -14,5 +14,15 @@ export function recentPosts(ctx: {
       ...route,
       href: route.urlPath,
     }))
+    .sort(
+      (a, b) =>
+        parseDate(a.frontmatter.published_on) -
+        parseDate(b.frontmatter.published_on),
+    )
+    .reverse()
   return posts
+}
+function parseDate(dateString?: string): number {
+  if (!dateString) return 0
+  return new Date(dateString).getTime()
 }
